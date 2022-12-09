@@ -4,7 +4,7 @@
 
 DB_NAME=`ps -ef|grep pmon|grep -v grep|grep -v ASM | grep -v POEM | grep -v APX|grep -v MGMTDB|cut -d_ -f3 | sort -u|sed -e "s/[0-9]*$//"`
 USER=c##nfidba
-PASSWORD=all4g00d
+PASSWORD=XXXXXX
 SQLFILE=$1
 
 #export TNS_ADMIN=/u01/app/oracle/tns_admin
