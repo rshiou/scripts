@@ -1,0 +1,63 @@
+-- ** start of parameter file **
+--
+COMMENT *****************************************************************************
+COMMENT *          MANAGER CONFIG FILE                                              *
+COMMENT * Filename: mgr.prm                                                         *
+COMMENT * Purpose: The MGR process specifies the port for which all golden          *
+COMMENT * Oracle GoldenGate Porcess will communicate with in environment            *
+COMMENT *****************************************************************************
+
+PORT 7777
+
+COMMENT *****************************************************************************
+COMMENT * Use the PURGEOLDEXTRACTS parameter in a Manager parameter file to         *
+COMMENT * purge trail files when GoldenGate has finished processing them            *
+COMMENT * and they are older than x days.                                           *
+COMMENT *****************************************************************************
+
+purgeoldextracts /cloudfs/trail/r9, usecheckpoints, minkeepdays 1
+purgeoldextracts /cloudfs/trail/r3, usecheckpoints, minkeepdays 1
+purgeoldextracts /cloudfs/trail/lowes/r1, usecheckpoints, minkeepdays 1
+purgeoldextracts /cloudfs/trail/lowes/r2, usecheckpoints, minkeepdays 1
+
+COMMENT *****************************************************************************
+COMMENT * Use LAGCRITICALSECONDS, LAGCRITICALMINUTES, or LAGCRITICALHOURS to        *
+COMMENT * specify a lag threshold that is considered critical and to force a        *
+COMMENT * warning message to the error log when the threshold is reached.           *
+COMMENT * Use LAGINFOSECONDS, LAGINFOMINUTES, or LAGINFOHOURS to specify            *
+COMMENT * how often to report lag information to the error log.                     *
+COMMENT * Use LAGREPORTMINUTES and LAGREPORTHOURS to specify the interval           *
+COMMENT * at which Manager checks for Extract and Replicat lag.                     *
+COMMENT *****************************************************************************
+
+LAGCRITICALMINUTES 30
+LAGINFOHOURS 1
+LAGREPORTMINUTES 15
+
+COMMENT *****************************************************************************
+COMMENT * Use AUTORESTART to specify Extract or Replicat processes to be            *
+COMMENT * restarted by Manager after abnormal termination. You can use              *
+COMMENT * multiple AUTORESTART statements in the Manager parameter file,            *
+COMMENT * each specifying one or more processes to start.                           *
+COMMENT *****************************************************************************
+
+AUTORESTART ER *, RETRIES 5, WAITMINUTES 5, RESETMINUTES 40
+
+COMMENT *****************************************************************************
+COMMENT * Use AUTOSTART to specify Extract or Replicat processes to be              *
+COMMENT * restarted by Manager when Manager is restarted                            *
+COMMENT *****************************************************************************
+
+AUTOSTART ER *
+
+COMMENT *****************************************************************************
+COMMENT * Use CHECKMINUTES specifies the time to check for long running transactions*
+COMMENT *****************************************************************************
+
+CHECKMINUTES 30
+
+--
+-- ** end of parameter file
+
+
+

@@ -1,0 +1,148 @@
+#!/bin/bash
+# Script      : ogg_mon_v02.bsh
+# Version     : 5.0 -- send sms when process stopped running for over 15 mins (cron job runs every 15 mins)
+#             : 4.0 -- send clear notification if status was previously not "RUNNING"
+#             : 3.0 -- modified to only send out the "ERROR" lines from the rpt file - R. Shiou 6/4/2018
+# Purpose     : To monitor Goldengate processes and latency
+# Usage       : ogg_mon.bsh ORACLE_SID GOLDENGATE_HOME LAG_THRESHOLD
+# Example     : ogg_mon.bsh DBNAME /u01/app/goldengate/11.2.1.0.17 30
+# 
+# 
+# Parameters:
+#   1. ORACLE_SID: Database Instance name.
+#      This parameter is used to set the appropriate DB environment variables.
+#      (NOTE: This is the Instance name not Database name.)
+#   2. GOLDENGATE_HOME: Home directory of Goldengate installation
+#   3. LAG_THRESHOLD: Allowed lag time in minutes
+#
+# ******************
+# Functions
+# ******************
+# Usage function.
+# set -x
+function show_usage {
+    echo " "
+    echo "   Usage: $PWD/ogg_mon.bsh ORACLE_SID GOLDENGATE_HOME LAG_THRESHOLD"
+    echo "   ORACLE_SID  : Name of the Database instance that is configured for Goldengate replication. "
+    echo "   GOLDENGATE_HOME : Directory where Goldengate is installed. "
+    echo "   LAG_THRESHOLD   : Lag threshold in minutes"
+    echo "   Example: $PWD/ogg_mon.sh DBNAME /u01/app/ogg/11.2.1.0.17 30"
+    echo " "
+    exit 1
+}
+# **************************************
+# Input parameter validation
+# **************************************
+# DBNAME Input
+# ============
+if [ "$1" ]
+then
+   ORACLE_SID=`echo $1 | tr "[a-z]" "[A-Z]" `; export ORACLE_SID
+else
+   show_usage
+fi
+#
+# Golden Gate Home to Monitor
+# ===========================
+if [ "$2" ]
+then
+   OGG_HOME=`echo $2`; export OGG_HOME
+else
+   show_usage
+fi
+#
+# Lag Threshold in Minutes to Monitor
+# ===================================
+if [ "$3" ]
+then
+   LAG_THRESHOLD=`echo $3`; export LAG_THRESHOLD
+else
+   show_usage
+fi
+# **************************************
+# Setting up the environment
+# **************************************
+# ORAENV_ASK=NO; export ORAENV_ASK
+# . /usr/local/bin/oraenv
+. $HOME/.ogg_profile
+export MAILIST='nfii-dba-admin@nfiindustries.com '
+export MAILSMS='nfii-dba-sms@nfiindustries.com'
+export OGG_LOG=$OGG_HOME/dirscr/ogg_mon_"$ORACLE_SID".log
+# **************************************
+# Gather Goldengate information
+# **************************************
+cd $OGG_HOME
+$OGG_HOME/ggsci  << EOF > $OGG_LOG
+info all
+exit
+EOF
+# ********************************************
+# Monitoring Godlengate processes and lag time
+# ********************************************
+cat $OGG_LOG | egrep 'MANAGER|EXTRACT|REPLICAT'| tr ":" " " | while read LINE
+do
+  case $LINE in
+    *)
+    PROCESS_TYPE=`echo $LINE | awk -F" " '{print $1}'`
+    PROCESS_STATUS=`echo $LINE | awk -F" " '{print $2}'`
+    if [ "$PROCESS_TYPE" == "MANAGER" ]
+    then
+    #
+    # Process Monitor
+    # =======================
+       if [ "$PROCESS_STATUS" != "RUNNING" ]
+       then
+           SUBJECT="ALERT ... Goldengate process \"$PROCESS_TYPE\" is $PROCESS_STATUS on `uname -n`($ORACLE_SID)"
+           mailx -s "$SUBJECT" $MAILSMS < $GOLDENGATE_HOME/dirrpt/MGR.rpt
+           exit 1
+       else
+           continue
+       fi
+    elif [ "$PROCESS_TYPE" == "JAGENT" ]
+    then
+       if [ "$PROCESS_STATUS" != "RUNNING" ]
+       then
+           SUBJECT="WARNING ... Goldengate process \"$PROCESS_TYPE\" is $PROCESS_STATUS on `uname -n`"
+           mailx -s "$SUBJECT" $MAILIST < $GOLDENGATE_HOME/dirrpt/JAGENT.rpt
+       fi
+    else
+       PROCESS_NAME=`echo $LINE | awk -F" " '{print $3}'`
+       LAG_HH=`echo $LINE | awk -F" " '{print $4}'`
+       LAG_MM=`echo $LINE | awk -F" " '{print $5}'`
+       LAG_SS=`echo $LINE | awk -F" " '{print $6}'`
+       CKPT_HH=`echo $LINE | awk -F" " '{print $7}'`
+       CKPT_MM=`echo $LINE | awk -F" " '{print $8}'`
+       CKPT_SS=`echo $LINE | awk -F" " '{print $9}'`
+       if [ "$PROCESS_STATUS" != "RUNNING" ]
+       then
+           SUBJECT="ALERT...OGG \"$PROCESS_TYPE($PROCESS_NAME)\" $PROCESS_STATUS  `uname -n`($ORACLE_SID)"
+           awk '{if ($3 == "ERROR") {print $0}}' $OGG_HOME/dirrpt/${PROCESS_NAME}.rpt > $OGG_HOME/dirrpt/${PROCESS_NAME}.out 
+##           mailx -s "$SUBJECT" $MAILSMS < $OGG_HOME/dirrpt/${PROCESS_NAME}.rpt
+           if [ -f $OGG_HOME/dirrpt/${PROCESS_NAME}.NOTRUNNING ]
+           then 
+              SUBJECT="ALERT...OGG \"$PROCESS_TYPE($PROCESS_NAME)\" $PROCESS_STATUS  `uname -n`($ORACLE_SID) -- PLEASE CHECK"
+              echo -e "\n$PROCESS_TYPE($PROCESS_NAME) has STOPPED RUNNING for over 15 MINS. PLEASE CHECK..." >> $OGG_HOME/dirrpt/${PROCESS_NAME}.out
+              mailx -s "$SUBJECT" $MAILSMS < $OGG_HOME/dirrpt/${PROCESS_NAME}.out
+           else
+              echo $PROCESS_STATUS >  $OGG_HOME/dirrpt/${PROCESS_NAME}.NOTRUNNING
+              mailx -s "$SUBJECT" $MAILIST < $OGG_HOME/dirrpt/${PROCESS_NAME}.out
+           fi
+       else
+           if [ -f $OGG_HOME/dirrpt/${PROCESS_NAME}.NOTRUNNING ]
+           then
+               SUBJECT="CLEARED...OGG \"$PROCESS_TYPE($PROCESS_NAME)\" $PROCESS_STATUS `uname -n`($ORACLE_SID)"
+               PREV_STATUS=`cat $OGG_HOME/dirrpt/${PROCESS_NAME}.NOTRUNNING`
+               BODY="$PROCESS_TYPE: $PROCESS_NAME \n\nPrevious Status: $PREV_STATUS \nCurrent Status: $PROCESS_STATUS" 
+               echo -e $BODY | mailx -s "$SUBJECT" $MAILIST 
+               rm $OGG_HOME/dirrpt/${PROCESS_NAME}.NOTRUNNING
+           fi
+           if [ $LAG_HH -gt 00 -o $LAG_MM -ge $LAG_THRESHOLD ];
+           then
+              SUBJECT="ALERT ... Goldengate process \"$PROCESS_TYPE($PROCESS_NAME)\" has a lag of "$LAG_HH" hour "$LAG_MM" min on `uname -n`($ORACLE_SID)"
+              mailx -s "$SUBJECT" $MAILIST < $OGG_HOME/dirrpt/${PROCESS_NAME}.rpt
+           fi
+      fi
+    fi
+  esac
+done
+

@@ -1,0 +1,84 @@
+#!/bin/bash
+# *************************************************
+# $Header$ Copyright (c) 2019
+# =======================================================================
+# author    date       purpose
+# ========  ========   ==================================================
+# btoranto  07/15/2019 Monitor Oracle Data Guard for Lag and Apply
+#                      Runs from Standby Node, connects to Primary via TNS
+#                      and excepts the following input:
+#                      ORA_PRIM = {string}  PRIMARY Database
+#                      THREAD = {number 1 or 2} Primary RAC Instance #
+#                      ORA_SID = {string}   Standby Database (local)
+#
+#
+# Oracle ENV
+# ----------
+ORA_PRIM=$1
+THREAD=$2
+ORA_SID=$3
+export THREAD=$2
+export ORA_PRIM=$1
+export ORA_SID=$3
+export ORACLE_SID=$3
+. $HOME/.ora_profile
+export DATE=`date "+%m%d%y%T"`
+export SCRDIR=$HOME/scripts
+export HOST=`hostname | cut -c -12`
+export LOGDIR=$SCRDIR/logs
+export MARKER_STBY=$LOGDIR/marker_"$ORA_SID"_"$DATE".log
+export MARKER_PRIM=$LOGDIR/marker_"$ORA_PRIM"_"$DATE".log
+export ARCHLOC=/oracle/backup2/odg_archlog/"$ORA_PRIM"
+export LAGLOG=$LOGDIR/laglog_"$DATE"_"$ORA_SID".log
+export MAILIST="nfii-dba-admin@nfiindustries.com"
+
+$ORACLE_HOME/bin/sqlplus -s /nolog << EOF
+set trimspool on
+set verify off
+set feedback off
+set pagesize 0
+connect / as sysdba
+spool $MARKER_STBY
+select rpad(max(sequence#),12)
+from v\$archived_log;
+spool off;
+EOF
+
+$ORACLE_HOME/bin/sqlplus -s /nolog << EOF
+set trimspool on
+set verify off
+set feedback off
+set pagesize 0
+spool $MARKER_PRIM
+connect nfidba/all4g00d@$ORA_PRIM
+select rpad(max(sequence#),12)
+from v\$archived_log
+where thread# = $THREAD;
+spool off;
+EOF
+
+export mark1=`cat $MARKER_STBY`
+export mark2=`cat $MARKER_PRIM`
+export lag=$((mark2 - mark1))
+
+if [ $lag -gt 2 ]
+   then
+        echo "Last Log Applied STANDBY  : $mark1" > $LAGLOG
+        echo "Last Log Archived PRIMARY : $mark2" >> $LAGLOG
+        echo "Standby Lags Primary by   : $lag    " >> $LAGLOG
+        echo "                        " >> $LAGLOG
+        echo "Archive Logs on Disk" >> $LAGLOG
+        echo "====================" >> $LAGLOG
+        ls -laht $ARCHLOC >> $LAGLOG
+        mail -s "WARNING ODG !!! $ORA_PRIM Standby $ORA_SID has an Archive Gap" $MAILIST < $LAGLOG
+   else
+        rm -f $MARKER_STBY
+        rm -f $MARKER_PRIM
+	exit 1
+fi
+
+
+
+
+
+
