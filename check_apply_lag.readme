@@ -1,0 +1,7 @@
+this script will get a list of running instances (ps -ef | grep pmon)
+
+then loop through each one and check standby apply status
+
+skip if there is a flag file
+
+also skipping specific db at a specific day and time

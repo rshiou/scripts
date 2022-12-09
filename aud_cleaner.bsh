@@ -1,0 +1,18 @@
+#!/bin/bash
+# =======================================================================
+# $Header$
+# Copyright (c) NFI 2018
+# =======================================================================
+# author    date       purpose
+# ========  ========   ==================================================
+# btoranto  06/05/2018 Very simple audit & trace file cleaner
+#                      Run once a day to keep diag 
+# =======================================================================
+find /u01/app/oracle/admin -name '*.aud' -mtime +1 -exec rm -f {} \;
+find /u01/app/oracle/diag -name '*.trc' -mtime +1 -exec rm -f {} \;
+find /u01/app/oracle/diag -name '*.trm' -mtime +1 -exec rm -f {} \;
+find /u01/app/grid/diag -name '*.trm' -mtime +1 -exec rm -f {} \;
+find /u01/app/grid/diag -name '*.trc' -mtime +1 -exec rm -f {} \;
+find $HOME/global/logs -name '*.lst' -mtime +1 -exec rm -f {} \;
+find $HOME/global/logs -name '*.log' -mtime +1 -exec rm -f {} \;
+
