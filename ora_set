@@ -1,0 +1,6 @@
+export ORACLE_SID=$1
+export ORACLE_HOME=`grep "^${ORACLE_SID}_2:" /etc/oratab | cut -f2 -d':'`
+export ORACLE_SID=`grep "^${ORACLE_SID}_2:" /etc/oratab | cut -f1 -d':'`
+PATH=$ORACLE_HOME/bin:$PATH;export PATH
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH
+export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
