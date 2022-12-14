@@ -1,5 +1,5 @@
 #!/bin/bash
-#
+# 12/14/2022
 # du of each subdirectory in a directory for ASM
 #
 D=$1
