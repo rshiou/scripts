@@ -119,7 +119,7 @@ do
     ### loop through each dev/qa/prod
     ### oci iam compartment list --compartment-id $OCID_CUS_SITE_COMP --config-file $CONFIG_FILE ### json of compartments under the site compartment
     LIST_CUS_SITE_DBENV_COMP=$(oci iam compartment list --compartment-id $OCID_CUS_SITE_COMP --config-file $CONFIG_FILE)
-    for x in $(echo "$LIST_CUS_SITE_DBENV_COMP" | jq ' .data | keys | .[]') ### this includes the network compartment (most cases 0 - 3)
+    for x in $(echo "$LIST_CUS_SITE_DBENV_COMP" | jq ' .data | keys | .[]') ### this includes the network compartment
     do
       if [ "$(echo "$LIST_CUS_SITE_DBENV_COMP" | jq -r ".data[$x].\"name\"")" != "NETWORK" ]; ### loop through environment compartments except NETWORK
       then
