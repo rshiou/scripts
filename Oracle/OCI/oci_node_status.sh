@@ -121,11 +121,12 @@ do
     LIST_CUS_SITE_DBENV_COMP=$(oci iam compartment list --compartment-id $OCID_CUS_SITE_COMP --config-file $CONFIG_FILE)
     for x in $(echo "$LIST_CUS_SITE_DBENV_COMP" | jq ' .data | keys | .[]') ### this includes the network compartment (most cases 0 - 3)
     do
-      if [ "$(echo "$LIST_CUS_SITE_DBENV_COMP" | jq -r ".data[$x].\"name\"")" != "NETWORK" ]; ### loop through environment compartments except NETWORK
-      then
+          DBENV=$(echo "$LIST_CUS_SITE_DBENV_COMP" | jq -r ".data[$x].\"name\"") ## QA / DEV / PROD / NETWORK
+      ##if [ "$DBENV" != "NETWORK" ]; ### loop through environment compartments except NETWORK
+      ##then
          OCID_CUS_SITE_DBENV_COMP=$(echo "$LIST_CUS_SITE_DBENV_COMP" | jq -r ".data[$x].\"id\"") ## ocid of the db system compartment
-         DBSYS_LIST=$(oci db system list -c $OCID_CUS_SITE_DBENV_COMP --config-file $CONFIG_FILE)
-         if [ ! -z "$DBSYS_LIST" ] ;
+         DBSYS_LIST=$(oci db system list -c $OCID_CUS_SITE_DBENV_COMP --config-file $CONFIG_FILE) ## this will be null if compartment is NETWORK
+         if [ ! -z "$DBSYS_LIST" ] ; ## if
          then
             DBSYS_SITE_NAME=$(echo $DBSYS_LIST | jq -r ".data[] | .\"defined-tags\".\"NFI-TAGS\".\"Site_Name\"")
             DBSYS_CLIENT_NAME=$(echo $DBSYS_LIST | jq -r ".data[] | .\"defined-tags\".\"NFI-TAGS\".\"Client_Name\"")
@@ -138,12 +139,20 @@ do
             DBSYS_SHAPE=$(echo "$DBSYS_LIST" | jq -r ".data[].\"shape\"") ##
             DBSYS_HOSTNAME=$(echo "$DBSYS_LIST" | jq -r ".data[].\"hostname\"") ##
             DBSYS_DOMAIN=$(echo "$DBSYS_LIST" | jq -r ".data[].\"domain\"")
-            echo "--- ${DBSYS_CLIENT_NAME}: ${DBSYS_SITE_NAME} ${DBSYS_ENV} DB System Status ---"
-            echo "HOSTNAME: $DBSYS_HOSTNAME | DOMAIN: $DBSYS_DOMAIN"
-            echo "VM SHAPE: $DBSYS_SHAPE  | CPU COUNT: $DBSYS_CPU_COUNT"
-            echo "DB Node LifeCycle State: $DBNODE_LIFECYCLE_STATE"
+            ##if ([ "$ENV" = "Q" ] && [ "$DBENV" = "QA"]) || ([ "$ENV" = "D" ] && [ "$DBENV" = "DEV"]) || ([ "$ENV" = "P" ] && [ "$DBENV" = "PROD"]) || ([ "$ENV" = "A" ]);
+            ##if [[[ "$ENV" = "Q" ] && [ "$DBENV" = "QA"]]] || [[[ "$ENV" = "D" ] && [ "$DBENV" = "DEV"]]] || [[[ "$ENV" = "P" ] && [ "$DBENV" = "PROD"]]] || [[ "$ENV" = "A" ]];
+            ##if ([[ "$ENV" = "Q" ]] && [[ "$DBENV" = "QA"]]) || ([[ "$ENV" = "D" ]] && [[ "$DBENV" = "DEV"]]) || ([[ "$ENV" = "P" ]] && [[ "$DBENV" = "PROD"]]) || [[ "$ENV" = "A" ]];
+            ##if ([ "$ENV" == "Q" ] && [ "$DBENV" == "QA" ]) || ([ "$ENV" == "D" ] && [ "$DBENV" == "DEV" ]) || ([ "$ENV" == "P" ] && [ "$DBENV" == "PROD" ]) || [ "$ENV" == "A" ];
+            ##if ([ "${ENV,,}" == "q" ] && [ "${DBENV,,}" == "qa" ]) || ([ "${ENV,,}" == "d" ] && [ "${DBENV,,}" == "dev" ]) || ([ "${ENV,,}" == "p" ] && [ "${DBENV,,}" == "prod" ]) || [ "${ENV,,}" == "a" ];
+            if ([ "${ENV,,}" == "q" ] && [ "${DBSYS_ENV,,}" == "qa" ]) || ([ "${ENV,,}" == "d" ] && [ "${DBSYS_ENV,,}" == "dev" ]) || ([ "${ENV,,}" == "p" ] && [ "${DBSYS_ENV,,}" == "prod" ]) || [ "${ENV,,}" == "a" ];
+            then
+               echo "--- ${DBSYS_CLIENT_NAME}: ${DBSYS_SITE_NAME} ${DBSYS_ENV} DB System Status ---"
+               echo "HOSTNAME: $DBSYS_HOSTNAME | DOMAIN: $DBSYS_DOMAIN"
+               echo "VM SHAPE: $DBSYS_SHAPE  | CPU COUNT: $DBSYS_CPU_COUNT"
+               echo "DB Node LifeCycle State: $DBNODE_LIFECYCLE_STATE"
+            fi
          fi
-      fi
+     ## fi
     done
     echo " "
     echo " "
@@ -153,4 +162,20 @@ done
 date
 check_err $?
 
-mailx -s "NFI OCI DB System Status (`hostname`:  $SCRIPT)" -r $FROM_EMAIL $TO_EMAIL < ${LOGFILE}
+if [ "${ENV,,}" == "q" ];
+then
+  DBENV=QA
+elif [ "${ENV,,}" == "d" ];
+then
+  DBENV=DEV
+elif [ "${ENV,,}" == "p" ];
+then
+  DBENV=PROD
+elif [ "${ENV,,}" == "a" ];
+then
+  DBENV=ALL
+fi
+
+
+mailx -s "NFI OCI ${DBENV} DB System Status (`hostname`:  $SCRIPT)" -r $FROM_EMAIL $TO_EMAIL < ${LOGFILE}
+##mailx -s "NFI OCI ${DBSYS_ENV} DB System Status (`hostname`:  $SCRIPT)" -r $FROM_EMAIL $TO_EMAIL < ${LOGFILE}
