@@ -1,0 +1,206 @@
+#
+# rshiou: 1/30/2023 - returns DB & DB System patches info under the tenancy
+#
+#
+#
+#
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning, module='cryptography')
+#
+import oci
+import os
+import json
+import sys
+import datetime
+import smtplib
+from main_v01 import *
+
+#warnings.filterwarnings("ignore", category=CryptographyDeprecationWarning)
+
+now = datetime.datetime.now()
+
+# Format the date and time as a string
+date_string = now.strftime("%Y-%m-%d_%H-%M-%S")
+
+file_path = '/usr/local/bin/opc/logs/oci_db_patches'
+file_prefix = 'oci_patches'
+extension = '.txt'
+
+# Delete log files older than n_num days
+n_num = datetime.timedelta(days=3)
+for file in os.listdir(file_path):
+    ##print(file)
+    if file.startswith(file_prefix) and file.endswith(extension):
+       path_file = os.path.join(file_path, file)
+       file_age = now - datetime.datetime.fromtimestamp(os.path.getctime(path_file))
+       if file_age >= n_num:
+          # delete the file
+          os.remove(path_file)
+
+out_file = file_prefix + "_" + date_string + extension
+filename = os.path.join(file_path, out_file)
+
+logger = logging.getLogger(name='OCI DB Patches Info')
+
+logger.setLevel(logging.INFO)  # set to logging.INFO if you don't want DEBUG logs
+##formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - '
+##                              '%(message)s')
+formatter = logging.Formatter('%(message)s')
+
+fh = logging.FileHandler(filename)
+fh.setLevel(logging.INFO)
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
+
+# Create a client for the Database service
+config=oci.config.from_file(file_location="~/.oci/config.cliinfra.comp")
+db_client = oci.database.DatabaseClient(config)
+OCID_CLIINFRA = "ocid1.compartment.oc1..aaaaaaaaq7zqhyl56jwmqqqypowpozkdopsp7epd7bydkccrk3yf4v5k3r3a"
+
+identity_client = oci.identity.IdentityClient(config)
+client_compartments = identity_client.list_compartments(OCID_CLIINFRA)
+
+if client_compartments.data:
+   for client_compartment in client_compartments.data:
+       #logger.info(client_compartment)
+       client_compartment_id = client_compartment.id
+       client_compartment_name = client_compartment.name
+       logger.info("+")
+       logger.info("+")
+       logger.info("+")
+       logger.info("===========================================")
+       logger.info("<b> + CUSTOMER : " + client_compartment_name + "</b>")
+       logger.info("===========================================")
+       logger.info("+")
+       logger.info("+")
+       logger.info("+")
+       ##logger.info("Client Compartment OCID: " + client_compartment_id)
+       ##cli_site_compartments = identity_client.list_compartments(client_compartment_id)
+       cli_site_compartments = identity_client.list_compartments(client_compartment_id,lifecycle_state=oci.identity.models.Compartment.LIFECYCLE_STATE_ACTIVE)
+       if cli_site_compartments.data:
+          for cli_site_compartment in cli_site_compartments.data:
+              #logger.info(cli_site_compartment)
+              cli_site_compartment_id = cli_site_compartment.id
+              cli_site_env_compartments = identity_client.list_compartments(cli_site_compartment_id,lifecycle_state=oci.identity.models.Compartment.LIFECYCLE_STATE_ACTIVE)
+              if cli_site_env_compartments.data:
+                 for cli_site_env_compartment in cli_site_env_compartments.data:  # loop through dev/network/prod/qa compartments
+                     ocid_cli_site_env_compartment = cli_site_env_compartment.id # use this to get a list of db homes, then from db_home_id get db patches
+                     ## list of db systems under the client site environment compartment
+                     ## use this for db system patches
+                     lst_db_systems = db_client.list_db_systems(cli_site_env_compartment.id)  ## db systems
+                     #
+                     try:
+                        nfi_tags = cli_site_env_compartment.defined_tags['NFI-TAGS']
+                     except KeyError:
+                        logger.info("NFI-TAGS key not found")
+                     try:
+                        client_name = nfi_tags['Client_Name']
+                     except KeyError:
+                        logger.info("NFI-TAGS.Client_Name not found")
+                     try:
+                        env = nfi_tags['Env']
+                     except KeyError:
+                        logger.info("NFI-TAGS.Env not found")
+                     try:
+                        site_name = nfi_tags['Site_Name']
+                     except KeyError:
+                        logger.info("NFI-TAGS.Site_Name not found")
+                     #logger.info(client_name + ": " + site_name + ": " +  env)
+                     #logger.info("==================================")
+                     ##
+                     ## if dev/qa/prod only, not shared - shared is a network compartment
+                     ##
+                     if env.lower() != "shared":
+                        logger.info("==================================")
+                        logger.info("<b>" + client_name + ": " + site_name + ": " +  env + "</b>")
+                        logger.info("==================================")
+                        lst_db_homes = db_client.list_db_homes(ocid_cli_site_env_compartment)
+                        if lst_db_homes.data:
+                           for db_home in lst_db_homes.data:
+                               logger.info("&nbsp; DB Home: " + db_home.display_name)
+                               db_home_id=db_home.id
+                               logger.info("&nbsp; DB Home ocid: " + db_home_id)
+                               lst_db_home_patches = db_client.list_db_home_patches(db_home_id)
+                               #logger.info(lst_db_home_patches.data)
+                               if lst_db_home_patches.data:
+                                  logger.info("*")
+                                  logger.info("*** Available Database Patches ***")
+                                  logger.info("*")
+                                  for db_home_patch in lst_db_home_patches.data:
+                                      logger.info("++ Patch Description : " + db_home_patch.description)
+                                      logger.info("&nbsp;&nbsp;  ++ ocid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : " + db_home_patch.id)
+                                      logger.info("&nbsp;&nbsp;  ++ version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : " + db_home_patch.version)
+                                      if db_home_patch.last_action is None:
+                                         logger.info("&nbsp;&nbsp;  ++ last_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : None")
+                                      else:
+                                         logger.info("&nbsp;&nbsp;  ++ last_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : " + db_home_patch.last_action)
+                                      if db_home_patch.lifecycle_state is None:
+                                         logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : None")
+                                      else:
+                                         logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : " + db_home_patch.lifecycle_state)
+                                      logger.info("&nbsp;&nbsp;  ++ time_released&nbsp; : " + db_home_patch.time_released.strftime("%Y-%m-%d %H:%M:%S"))
+                                      logger.info("&nbsp;&nbsp;  ++")
+                               else:
+                                  logger.info("*")
+                                  logger.info("*** No Database Patches Available ***")
+                                  logger.info("*")
+                        else:
+                           logger.info("No db home")
+                        if lst_db_systems.data:
+                           for db_system in lst_db_systems.data:
+                               db_system_id = db_system.id # ocid of the db system
+                               lst_db_system_patches = db_client.list_db_system_patches(db_system_id).data
+                               #logger.info(db_system)
+                               if lst_db_system_patches:
+                                  logger.info("*")
+                                  logger.info("*** Available Database System Patches ***")
+                                  logger.info("*")
+                                  for db_system_patch in lst_db_system_patches:
+                                      #logger.info(db_system_patch)
+                                      logger.info("++ Patch Description : " + db_system_patch.description)
+                                      logger.info("&nbsp;&nbsp;  ++ ocid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;           : " + db_system_patch.id)
+                                      logger.info("&nbsp;&nbsp;  ++ version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        : " + db_system_patch.version)
+                                      if db_system_patch.last_action is None:
+                                         logger.info("&nbsp;&nbsp;  ++ last_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    : None")
+                                      else:
+                                         logger.info("&nbsp;&nbsp;  ++ last_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    : " + db_system_patch.last_action)
+                                      if db_system_patch.lifecycle_state is None:
+                                         logger.info("&nbsp;&nbsp;  ++ lifecycle_state : None")
+                                      else:
+                                         logger.info("&nbsp;&nbsp;  ++ lifecycle_state : " + db_system_patch.lifecycle_state)
+                                      logger.info("&nbsp;&nbsp;  ++ time_released : " + db_system_patch.time_released.strftime("%Y-%m-%d %H:%M:%S"))
+                                      logger.info("&nbsp;&nbsp;  ++")
+                               else:
+                                  logger.info("*")
+                                  logger.info("*** No Database System Patches ***")
+                                  logger.info("*")
+                        else:
+                           logger.info("*")
+                           logger.info("*** No DB System ***")
+                           logger.info("*")
+              else:
+                 logger.info("No client site environment compartments")
+       else:
+          logger.info("No client site compartments")
+else:
+  logger.info("No compartments available under the specified compartment_id")
+
+message = MIMEMultipart()
+
+with open(filename, 'r') as f:
+    body = f.read()
+
+colored_body = body.replace("SUCCESS", "<b><font color='green'>SUCCESS</font></b>")
+colored_body = colored_body.replace("FAILED", "<b><font color='red'>FAILED</font></b>")
+colored_body = colored_body.replace("\n", "<br>")
+
+html = f"<html><body>{colored_body}</body></html>"
+
+message.attach(MIMEText(colored_body, "html"))
+#msg = MIMEText(html, 'html')
+
+send_mail(message.as_string(), 'light-switch', 'OCI DB Patch Info', 'ronald.shiou@nfiindustries.com')
+
+#send_mail(file_contents, 'light-switch', 'OCI DB Patch Info', 'ronald.shiou@nfiindustries.com')
+
