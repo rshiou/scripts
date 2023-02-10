@@ -1,0 +1,19 @@
+# **************************************************************
+# $ Copyright (c) 2022
+# ==============================================================
+# author    date       purpose
+# ========  ========   =========================================
+# btoranto  10/07/2022 OCI DB Node Restart
+#   requires: Hostname, ssh key, Oracle OCI Node OCID
+# **************************************************************
+export LOG="logs/oci_db_node_restart.log"
+export ERRLOG="logs/oci_db_node_restart.err"
+export KEY_LOC="/home/opc/jump/keys"
+export PY_FUNC="python oci_db_restart_v01.py"
+rm -f $ERRLOG
+export MAILIST="nfii-dba-admin@nfiindustries.com nfii-dba-sms@nfiindustries.com"
+touch $LOG
+echo 'Restart DBs' >> $LOG
+python oci_db_restart_v01.py nfioci-db-krft705p-scan.krft705.usva0017.oraclevcn.com $KEY_LOC/ssh-key-DB-KRFT705P.key ocid1.dbnode.oc1.iad.anuwcljspgm6r4ia377z4jxakqzjbbta3x6h2cfphn46ljysjfn7meacepcq
+python oci_db_restart_v01.py nfioci-db-bglt341p.bglt341.usva0017.oraclevcn.com $KEY_LOC/ssh-key-DB-BGLT341P.key ocid1.dbnode.oc1.iad.anuwcljrpgm6r4ia26vozv7r4hdndgr46a5doaimadb64gcghlpuba2ddlfq
+echo 'Restart Complete' >>$LOG
