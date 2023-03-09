@@ -1,6 +1,13 @@
+#!/usr/bin/env python
+# ***********************************************************************
+# $ Copyright (c) 2022
+# =======================================================================
+# author    date       purpose
+# ========  ========   ==================================================
 # btoranto  07/29/2022 main.py for global settings
 # **************************************************************
 import sys, csv, os, paramiko, json, re, subprocess, logging, datetime, logging
+#import sys, csv, os, json, re, subprocess, logging, datetime, logging
 from scp import SCPClient
 from smtplib import SMTP
 from email.mime.text import MIMEText
@@ -43,3 +50,4 @@ def send_mail(body, m_host, m_subject, m_distro):
 
 # Users
 oraOCIuser = r'opc'
+

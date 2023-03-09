@@ -1,8 +1,11 @@
 #
 # rshiou: 1/30/2023 - returns DB & DB System patches info under the tenancy
-#  
-# 
-#
+#                   - log output to a file  
+#                   - email the file as body
+#  Enhancement - combine db patches script with db node lifecycle status script
+#              - accept parameters: p for patches, l for lifecycle
+#                                 : qa / dev / prod / all for different environments 
+#  Usage: 
 #
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning, module='cryptography')
@@ -14,8 +17,19 @@ import sys
 import datetime
 import smtplib
 from main_v01 import *
+import argparse
 
-#warnings.filterwarnings("ignore", category=CryptographyDeprecationWarning)
+# input params
+parser = argparse.ArgumentParser(description='Accept input parameters')
+parser.add_argument('-t', '--type', type=str, help='Type: patch info or lifecycle status')
+parser.add_argument('-e', '--env', type=str, help='Environment: qa / dev / prod / all')
+
+args = parser.parse_args()
+
+# inquiry type 
+i_type = args.type
+# inquiry environment
+i_env = args.env
 
 now = datetime.datetime.now()
 
@@ -27,7 +41,7 @@ file_prefix = 'oci_patches'
 extension = '.txt'
 
 # Delete log files older than n_num days
-n_num = datetime.timedelta(days=3)
+n_num = datetime.timedelta(days=1)
 for file in os.listdir(file_path):
     ##print(file)
     if file.startswith(file_prefix) and file.endswith(extension):
@@ -37,6 +51,7 @@ for file in os.listdir(file_path):
           # delete the file 
           os.remove(path_file) 
 
+# log file
 out_file = file_prefix + "_" + date_string + extension 
 filename = os.path.join(file_path, out_file)
 
@@ -200,7 +215,10 @@ html = f"<html><body>{colored_body}</body></html>"
 message.attach(MIMEText(colored_body, "html"))
 #msg = MIMEText(html, 'html')
 
+TO_MAIL = 'nfii-dba-admin@nfiindustries.com'
+
 send_mail(message.as_string(), 'light-switch', 'OCI DB Patch Info', 'ronald.shiou@nfiindustries.com')
+send_mail(message.as_string(), 'light-switch', 'OCI DB Patch Info', TO_MAIL)
    
 #send_mail(file_contents, 'light-switch', 'OCI DB Patch Info', 'ronald.shiou@nfiindustries.com')
 
