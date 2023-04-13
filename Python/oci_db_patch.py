@@ -213,7 +213,13 @@ elif i_type.upper() == "DBSYS":
 
 #status = IN_PROGRESS
 
-       
+logger.info("*")       
+logger.info("*")       
+logger.info("*")       
+logger.info("*** Run the following on the db server as root if there's any issues ***")       
+logger.info(" $ /opt/oracle/dcs/bin/dbcli list-jobs ")
+logger.info(" $ /opt/oracle/dcs/bin/dbcli describe-job -i [job-id] ")
+
 
 message = MIMEMultipart()
 

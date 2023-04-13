@@ -27,7 +27,7 @@ import argparse
 
 # db_id = db_sys_id or db_home_id, patch = db_system_patch or db_home_patch
 def gen_patch_commands(logger, db_id, patch, i_type, i_action, i_count):
-    oci_db_patch = '/usr/local/bin/opc/scripts/oci_db_patch.py'
+    oci_db_patch = '/usr/local/bin/opc/repo/scripts/Python/oci_db_patch.py'
     if i_type not in ['DBSYS', 'DB']:
        raise ValueError(f"Invalid value '{i_type}' for parameter 'i_type'")
     if i_action not in ['PRECHECK', 'APPLY', 'BOTH']:
