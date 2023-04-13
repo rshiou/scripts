@@ -1,0 +1,25 @@
+#!/bin/bash
+
+SITE=KRFT705_QA
+PATCHDESC=JAN2023
+DATETIME=`date +'%m%d%y%H%M%S'`
+LOG=/usr/local/bin/opc/scripts/patching/logs/${SITE}_${PATCHDESC}_${DATETIME}.log
+
+## PRECHECK 
+python3 /usr/local/bin/opc/repo/scripts/Python/oci_db_patch.py -t DB -d ocid1.database.oc1.iad.anuwcljspgm6r4iagf4jucznkbnhzenl3nlurbmm6mndpdiu3lhnlmkyktoq -p ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqai4kbcz7m77xbehw3wiyikwnwtnhhnegii7uftipj5w7a -a PRECHECK > $LOG
+
+
+STATUS=`grep -oP 'Final status: \K\S+' $LOG`
+
+if [ $STATUS == 'SUCCEEDED' ]
+then
+   echo " *** Applying the patch ***" 
+   echo " *** Applying the patch ***" >> $LOG 
+   ## APPLY if precheck succeeded
+   python3 /usr/local/bin/opc/repo/scripts/Python/oci_db_patch.py -t DB -d ocid1.database.oc1.iad.anuwcljspgm6r4iagf4jucznkbnhzenl3nlurbmm6mndpdiu3lhnlmkyktoq -p ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqai4kbcz7m77xbehw3wiyikwnwtnhhnegii7uftipj5w7a -a APPLY >> $LOG
+else
+   echo " *** Precheck Failed. Please check!!! ***"
+fi
+
+
+
