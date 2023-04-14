@@ -20,6 +20,8 @@ import sys
 import datetime
 import time
 import smtplib
+import random
+import string
 from main_v01 import *
 import argparse
 
@@ -39,12 +41,13 @@ i_patch_id = args.patch
 i_action = args.action
 
 now = datetime.datetime.now()
+rand_str = ''.join(random.choices(string.ascii_letters + string.digits, k=4))
 
 # Format the date and time as a string
 date_string = now.strftime("%Y-%m-%d_%H-%M-%S")
 
 file_path = '/usr/local/bin/opc/logs/db_patching'
-file_prefix = 'oci_db_patch'
+file_prefix = rand_str + "_" + i_type + "_" + i_action  
 extension = '.txt'
 
 # Delete log files older than n_num days
@@ -87,6 +90,8 @@ status = 'IN_PROGRESS'
 if i_type.upper() == "DB":
    response = db_client.get_database(i_db_id)
    db_name = response.data.db_name
+   final_out_file = db_name + "_" + out_file
+   final_filename = os.path.join(file_path, final_out_file) 
    logger.info("**" + db_name + " : " + i_action + " for patch " + i_patch_id + " running...")
    print("**" + db_name + " : " + i_action + " for patch " + i_patch_id + " running...")
    ##result = subprocess.run(['oci', 'db', 'database', 'patch', '--database-id', i_db_id, '--patch-action', i_action, '--patch-id', i_patch_id,  '--config-file', config_file])
@@ -155,6 +160,8 @@ if i_type.upper() == "DB":
 elif i_type.upper() == "DBSYS":
    response = db_client.get_db_system(i_db_id)
    db_system_name = response.data.display_name
+   final_out_file = db_system_name + "_" + out_file
+   final_filename = os.path.join(file_path, final_out_file)
    logger.info("**" + db_system_name + " : " + i_action + " for patch " + i_patch_id + " running...")
    print("**" + db_system_name + " : " + i_action + " for patch " + i_patch_id + " running...")
    try:
@@ -241,8 +248,8 @@ html = f"<html><body>{colored_body}</body></html>"
 message.attach(MIMEText(colored_body, "html"))
 #msg = MIMEText(html, 'html')
 
-#TO_MAIL = 'nfii-dba-admin@nfiindustries.com'
-TO_MAIL = 'ronald.shiou@nfiindustries.com'
+TO_MAIL = 'nfii-dba-admin@nfiindustries.com'
+#TO_MAIL = 'ronald.shiou@nfiindustries.com'
 
 if i_type == 'DB':
    m_subject = "OCI DB Patching " + i_action + " on " + db_name + " " + status
@@ -251,3 +258,5 @@ elif i_type == 'DBSYS':
 
 send_mail(message.as_string(), '', m_subject, TO_MAIL)
 
+os.rename(filename,final_filename)
+print("Log file: " + final_filename)
