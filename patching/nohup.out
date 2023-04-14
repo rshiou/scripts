@@ -1,0 +1,20 @@
+ *** Applying the patch ***
+ *** Running DB SYSTEM PRECHECK *** 
+ *** Applying DB SYSTEM patch ***
+ *** Running DB PRECHECK *** 
+TransientServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.93.1, Oracle-PythonCLI/3.23.2",
+    "code": "IncorrectState",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The operation cannot be performed because the Db System with ID ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iafwzermuyhvjuwpgzkqfxcts2f4kdhq5vktwn6qakqx5q is in the UPDATING state.",
+    "opc-request-id": "B67378DD556F4A9C8DD7D1FE7063088B/235517B50CBA2B3373F450B3F7438BC9/F24D801A36F87EDBE7BF28ADBB99F924",
+    "operation_name": "update_db_home",
+    "request_endpoint": "PUT https://database.us-ashburn-1.oraclecloud.com/20160918/dbHomes/ocid1.dbhome.oc1.iad.anuwcljtwzrr5tiaryl2pq3ccpoic66auuwulzgvocoezl6bf7zmxzxnmrtq",
+    "status": 409,
+    "target_service": "database",
+    "timestamp": "2023-04-13T23:01:20.560340+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+ *** Running DB PATCH APPLY *** 
+ **** DB PATCH APPLY Failed. Please check!!! ***
