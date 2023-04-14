@@ -1,20 +1,30 @@
- *** Applying the patch ***
+DBSYS
  *** Running DB SYSTEM PRECHECK *** 
- *** Applying DB SYSTEM patch ***
+usage: oci_db_patch.py [-h] -t {DB,DBSYS} -d DB -p PATCH -a {PRECHECK,APPLY}
+oci_db_patch.py: error: argument -d/--db: expected one argument
+ *** DB SYS Precheck  . Please check!!! ***
  *** Running DB PRECHECK *** 
-TransientServiceError:
-{
-    "client_version": "Oracle-PythonSDK/2.93.1, Oracle-PythonCLI/3.23.2",
-    "code": "IncorrectState",
-    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
-    "message": "The operation cannot be performed because the Db System with ID ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iafwzermuyhvjuwpgzkqfxcts2f4kdhq5vktwn6qakqx5q is in the UPDATING state.",
-    "opc-request-id": "B67378DD556F4A9C8DD7D1FE7063088B/235517B50CBA2B3373F450B3F7438BC9/F24D801A36F87EDBE7BF28ADBB99F924",
-    "operation_name": "update_db_home",
-    "request_endpoint": "PUT https://database.us-ashburn-1.oraclecloud.com/20160918/dbHomes/ocid1.dbhome.oc1.iad.anuwcljtwzrr5tiaryl2pq3ccpoic66auuwulzgvocoezl6bf7zmxzxnmrtq",
-    "status": 409,
-    "target_service": "database",
-    "timestamp": "2023-04-13T23:01:20.560340+00:00",
-    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
-}
- *** Running DB PATCH APPLY *** 
- **** DB PATCH APPLY Failed. Please check!!! ***
+Traceback (most recent call last):
+  File "/usr/local/bin/opc/repo/scripts/Python/oci_db_patch.py", line 90, in <module>
+    response = db_client.get_database(i_db_id)
+  File "/usr/lib/python3.6/site-packages/oci/database/database_client.py", line 13345, in get_database
+    api_reference_link=api_reference_link)
+  File "/usr/lib/python3.6/site-packages/oci/base_client.py", line 485, in call_api
+    response = self.request(request, allow_control_chars, operation_name, api_reference_link)
+  File "/usr/lib/python3.6/site-packages/circuitbreaker.py", line 52, in wrapper
+    return self.call(function, *args, **kwargs)
+  File "/usr/lib/python3.6/site-packages/circuitbreaker.py", line 67, in call
+    result = func(*args, **kwargs)
+  File "/usr/lib/python3.6/site-packages/oci/base_client.py", line 632, in request
+    self.raise_service_error(request, response, service_code, message, operation_name, api_reference_link, target_service, request_endpoint, client_version, timestamp, deserialized_data)
+  File "/usr/lib/python3.6/site-packages/oci/base_client.py", line 801, in raise_service_error
+    deserialized_data=deserialized_data)
+oci.exceptions.ServiceError: {'target_service': 'database', 'status': 404, 'code': 'NotAuthorizedOrNotFound', 'opc-request-id': '27A5F41D99D749A8A2CEAC6D590CF269/E6243ED5ABABBE0C53A5345D8303F7B0/9E407E93FB07FF412D52BD6241C58DE3', 'message': 'Authorization failed or requested resource not found.', 'operation_name': 'get_database', 'timestamp': '2023-04-14T19:43:08.470194+00:00', 'client_version': 'Oracle-PythonSDK/2.93.1', 'request_endpoint': 'GET https://database.us-ashburn-1.oraclecloud.com/20160918/databases/ocid1.dbhome.oc1.iad.anuwcljs5fkiadyafnxbz5c6cuiyguupitvtathfy2j7fspbp3377dtm63ga', 'logging_tips': 'To get more info on the failing request, refer to https://docs.oracle.com/en-us/iaas/tools/python/latest/logging.html for ways to log the request/response details.', 'troubleshooting_tips': "See https://docs.oracle.com/iaas/Content/API/References/apierrors.htm#apierrors_404__404_notauthorizedornotfound for more information about resolving this error. Also see https://docs.oracle.com/iaas/api/#/en/database/20160918/Database/GetDatabase for details on this operation's requirements. If you are unable to resolve this database issue, please contact Oracle support and provide them this full error message."}
+./oci_patching_main.sh: line 147: unexpected token `<>', conditional binary operator expected
+./oci_patching_main.sh: line 147: syntax error near `<>'
+./oci_patching_main.sh: line 147: `if [[ $TYPE <> "DBSYS" && $DB_PRECHECK_STATUS == "SUCCEEDED" ]];'
+ *** Running DB PRECHECK *** 
+./oci_patching_main.sh: line 147: unexpected token `<>', conditional binary operator expected
+./oci_patching_main.sh: line 147: syntax error near `<>'
+./oci_patching_main.sh: line 147: `if [[ $TYPE <> "DBSYS" && $DB_PRECHECK_STATUS == "SUCCEEDED" ]];'
+ *** Running DB PRECHECK *** 

@@ -1,0 +1,7 @@
+SITE=MSAP919_QA
+PATCHDESC=JAN2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iafwzermuyhvjuwpgzkqfxcts2f4kdhq5vktwn6qakqx5q
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqaxgeqacj73ceprsgupmmfoiutfz7rrj3j5y26fsiy3mhq
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iakjhwa6gw5ol77sykka3e7hjgrnnzzkexyiylpywy3nta
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqaca5dw5locqgv6yop5tbejjz2nklorhta5pjkngr6fpxq
+TYPE=BOTH

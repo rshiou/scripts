@@ -6,7 +6,18 @@
 #               3) DB Patch Precheck
 #               4) DB Patch Apply
 #
-# 
+#   Usage: ./oci_patching_main.sh PARM_FILE
+#     e.g. ./oci_patching_main.sh MSAP919_QA.parm
+#
+# Param file sample
+#  SITE=SITE_ENV [e.g. MSAP919_QA]
+#  PATCHDESC=MMYYYY [e.g. JAN2023]
+#  DBSYS_ID=db_system_ocid [ required if type = DBSYS or BOTH e.g. ocid1.dbsystem.xxxxx]
+#  DBSYS_PATCH_ID=db_system_patch_ocid [ required if type = DBSYS or BOTH e.g ocid1.dbpatch.xxxxx]
+#  DB_ID=database_ocid [ required if type = DB or BOTH e.g. ocid1.database.oc1.xxxxxx]
+#  DB_PATCH_ID=database_patch_ocid [ required if type = DB or BOTH e.g. ocid1.dbpatch.oc1.xxxxx]
+#  TYPE=[required: DB | DBSYS | BOTH]
+ 
 
 PARAM_FILE=$1
 
@@ -20,20 +31,6 @@ DBSYS_PATCH_ID=$DBSYS_PATCH_ID
 DB_ID=$DB_ID
 DB_PATCH_ID=$DB_PATCH_ID
 TYPE=$TYPE
-
-#SITE=MSAP919_QA
-#PATCHDESC=JAN2023
-#DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iafwzermuyhvjuwpgzkqfxcts2f4kdhq5vktwn6qakqx5q
-#DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqaxgeqacj73ceprsgupmmfoiutfz7rrj3j5y26fsiy3mhq
-#DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iakjhwa6gw5ol77sykka3e7hjgrnnzzkexyiylpywy3nta
-#DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqaca5dw5locqgv6yop5tbejjz2nklorhta5pjkngr6fpxq
-#TYPE=DB OR DBSYS OR BOTH
-
-# Check if all required parameters exist
-#if [[ -z "${SITE}" || -z "${PATCHDESC}" || -z "${DBSYS_ID}" || -z "${DBSYS_PATCH_ID}" || -z "${DB_ID}" || -z "${DB_PATCH_ID}" || -z "${TYPE}" ]]; then
-#  echo "Error: One or more required parameters are missing in the param file."
-#  exit 1
-#fi
 
 if [[ -z $TYPE ]];
 then
@@ -75,30 +72,42 @@ DB_PRECHECK_CMD="python3 /usr/local/bin/opc/repo/scripts/Python/oci_db_patch.py 
 DB_APPLY_CMD="python3 /usr/local/bin/opc/repo/scripts/Python/oci_db_patch.py -t DB -d ${DB_ID} -p ${DB_PATCH_ID} -a APPLY"
 
 
-TYPE=DBSYS
+#TYPE=DBSYS
 DATETIME=`date +'%m%d%y%H%M%S'`
-LOG=/usr/local/bin/opc/scripts/patching/logs/${SITE}_${PATCHDESC}_${TYPE}_${DATETIME}.log
+LOG_PATH=/usr/local/bin/opc/scripts/patching/logs
+LOG=${LOG_PATH}/${SITE}_${PATCHDESC}_${TYPE}_${DATETIME}.log
+
+# delete log files older than 90 days
+find ${LOG_PATH} -name "*.log" -type f -mtime +90 -exec rm {} \;
 
 ## DBSYS 
 ## PRECHECK 
-echo " *** Running DB SYSTEM PRECHECK *** "
-echo " *** Running DB SYSTEM PRECHECK *** " >> $LOG
+##echo " *** Running DB SYSTEM PRECHECK *** "
+##echo " *** Running DB SYSTEM PRECHECK *** " >> $LOG
 
-if [[ ${TYPE} == 'DBSYS' || ${TYPE} == 'BOTH' ]];
+#
+# 1 - DB SYSTEM PRECHECK
+#
+if [[ ${TYPE} == "DBSYS" || ${TYPE} == "BOTH" ]];
 then
+  echo ${TYPE}
+  echo " *** Running DB SYSTEM PRECHECK *** "
+  echo " *** Running DB SYSTEM PRECHECK *** " >> $LOG
   ${SYS_PRECHECK_CMD} >> $LOG
   SYS_PRECHECK_STATUS=`grep -oP 'Final status: \K\S+' $LOG`
-  if [ $SYS_PRECHECK_STATUS == 'SUCCEEDED' ]
+  if [[ $SYS_PRECHECK_STATUS == "SUCCEEDED" ]];
   then
      echo " *** Applying DB SYSTEM patch ***" 
      DATETIME=`date +'%m%d%y%H%M%S'`
-     LOG2=/usr/local/bin/opc/scripts/patching/logs/${SITE}_${PATCHDESC}_${TYPE}_${DATETIME}.log
+     LOG2=${LOG_PATH}/${SITE}_${PATCHDESC}_${TYPE}_${DATETIME}.log
      echo " *** Applying DB SYSTEM patch ***" >> $LOG2 
-     ## APPLY if precheck succeeded
+#
+# 2 - DB SYSTEM PATCH APPLY if precheck succeeded
+#
      ${SYS_APPLY_CMD} >> $LOG2
      SYS_APPLY_STATUS=`grep -oP 'Final status: \K\S+' $LOG2`
   else
-     echo " *** DB SYS Precheck Failed. Please check!!! ***"
+     echo " *** DB SYS Precheck ${SYS_PRECHECK_STATUS} . Please check!!! ***"
      exit 1
   fi
 fi
@@ -107,34 +116,39 @@ if [[ "${TYPE}" == "DB" || ( "${TYPE}" == "BOTH" && "${SYS_APPLY_STATUS}" == "SU
 then
   echo " *** Running DB PRECHECK *** "
   DATETIME=`date +'%m%d%y%H%M%S'`
-  LOG3=/usr/local/bin/opc/scripts/patching/logs/${SITE}_${PATCHDESC}_${TYPE}_${DATETIME}.log
+  LOG3=${LOG_PATH}/${SITE}_${PATCHDESC}_${TYPE}_${DATETIME}.log
   echo " *** Running DB PRECHECK *** " >> $LOG3
+#
+# 3 - DB PATCH PRECHECK - if the above DB SYSTEM steps succeeded
+#
   ${DB_PRECHECK_CMD} >> $LOG3
   DB_PRECHECK_STATUS=`grep -oP 'Final status: \K\S+' $LOG3`
-elif [[ "${TYPE}" == "BOTH" && "${SYS_APPLY_STATUS}" <> "SUCCEEDED" ]];
+elif [[ "${TYPE}" == "BOTH" && "${SYS_APPLY_STATUS}" != "SUCCEEDED" ]];
 then
-  echo " *** DB SYS APPLY Failed. Please check!!! ***"
+  echo " *** DB SYS APPLY ${SYS_APPLY_STATUS} . Please check!!! ***"
   exit 1
 fi
 
-#########################
 
-if [ $DB_PRECHECK_STATUS == 'SUCCEEDED' ]
+if [[ $TYPE != "DBSYS" && $DB_PRECHECK_STATUS == "SUCCEEDED" ]];
 then
    echo " *** Running DB PATCH APPLY *** "
    DATETIME=`date +'%m%d%y%H%M%S'`
-   LOG4=/usr/local/bin/opc/scripts/patching/logs/${SITE}_${PATCHDESC}_${TYPE}_${DATETIME}.log
+   LOG4=${LOG_PATH}/${SITE}_${PATCHDESC}_${TYPE}_${DATETIME}.log
    echo " *** Running DB PATCH APPLY *** " >> $LOG4
+#
+# 4 - DB PATCH APPLY - if all the above succeeded
+#
    ${DB_APPLY_CMD} >> $LOG4
    DB_APPLY_STATUS=`grep -oP 'Final status: \K\S+' $LOG4`
 else
-   echo " *** DB PATCH PRECHECK Failed. Please check!!! ***"
+   echo " *** DB PATCH PRECHECK ${DB_PRECHECK_STATUS} . Please check!!! ***"
    exit 1
 fi
 
-if [ $DB_APPLY_STATUS <> 'SUCCEEDED' ]
+if [[ $DB_APPLY_STATUS != "SUCCEEDED" ]];
 then 
-   echo " **** DB PATCH APPLY Failed. Please check!!! ***"
+   echo " **** DB PATCH APPLY ${DB_APPLY_STATUS} . Please check!!! ***"
    exit 1
 fi
 

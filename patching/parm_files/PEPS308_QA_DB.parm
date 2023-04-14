@@ -1,0 +1,5 @@
+SITE=PEPS308_QA
+PATCHDESC=JAN2023
+DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4iaqcbqvwzqnh2gbenrshsh74xy3zomcpyqdwgwgz6ttsfa
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqai4kbcz7m77xbehw3wiyikwnwtnhhnegii7uftipj5w7a
+TYPE=DB
