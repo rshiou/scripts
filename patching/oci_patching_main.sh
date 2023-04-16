@@ -1,4 +1,8 @@
 #!/bin/bash
+# Author: R. Shiou
+#
+# Date: 4/16/2023 
+#
 # Description : The main script to be used for OCI Database and Database System Patching
 #               Calls custom python scripts to do the following
 #               1) DB System Patch Precheck
@@ -17,7 +21,7 @@
 #  DB_ID=database_ocid [ required if type = DB or BOTH e.g. ocid1.database.oc1.xxxxxx]
 #  DB_PATCH_ID=database_patch_ocid [ required if type = DB or BOTH e.g. ocid1.dbpatch.oc1.xxxxx]
 #  TYPE=[required: DB | DBSYS | BOTH]
- 
+# 
 
 PARAM_FILE=$1
 
