@@ -10,8 +10,9 @@
 #              - check db system lifecycle and database lifecycle
 #              
 #              - 3/29/2023 - generate patching commands
+#              - 4/16/2023 - added formatting to db / db system / patch ocid for better visual
 # 
-#  Usage: python3 oci_db_info.v2.py -t [ patch | lifecycle ] -e [ qa | dev | prod | all ]
+#  Usage: python3 oci_db_info.v3.py -t [ patch | lifecycle ] -e [ qa | dev | prod | all ]
 #
 import warnings
 #warnings.filterwarnings("ignore", category=DeprecationWarning, module='cryptography')
@@ -40,20 +41,20 @@ def gen_patch_commands(logger, db_id, patch, i_type, i_action, i_count):
        logger.info("<b> &nbsp;&nbsp;  ++ ++ </b>")
        if i_type == 'DB':
           if i_action == 'PRECHECK':
-             logger.info("<i> &nbsp;&nbsp;  $$ PRECHECK&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DB -d " + db_id + " -p " + patch.id + " -a PRECHECK </i>")
+             logger.info("<i> &nbsp;&nbsp;  $$ PRECHECK&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DB -d " + db_id + " -p <b><font color='blue>" + patch.id + "</font></b> -a PRECHECK </i>")
           elif i_action == 'APPLY':
-             logger.info("<i> &nbsp;&nbsp;  $$ APPLY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DB -d " + db_id + " -p " + patch.id + " -a APPLY </i>")
+             logger.info("<i> &nbsp;&nbsp;  $$ APPLY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DB -d " + db_id + " -p <b><font color='blue'>" + patch.id + "</font></b> -a APPLY </i>")
           elif i_action == 'BOTH':
-             logger.info("<i> &nbsp;&nbsp;  $$ PRECHECK&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DB -d " + db_id + " -p " + patch.id + " -a PRECHECK </i>" )
-             logger.info("<i> &nbsp;&nbsp;  $$ APPLY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DB -d " + db_id + " -p " + patch.id + " -a APPLY </i>")
+             logger.info("<i> &nbsp;&nbsp;  $$ PRECHECK&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DB -d " + db_id + " -p <b><font color='blue'>" + patch.id + "</font></b> -a PRECHECK </i>" )
+             logger.info("<i> &nbsp;&nbsp;  $$ APPLY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DB -d " + db_id + " -p <b><font color='blue'>" + patch.id + "</font></b> -a APPLY </i>")
        elif i_type == 'DBSYS':
           if i_action == 'PRECHECK':
-             logger.info("<i> &nbsp;&nbsp;  $$ PRECHECK&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DBSYS -d " + db_id + " -p " + patch.id + " -a PRECHECK </i>" )
+             logger.info("<i> &nbsp;&nbsp;  $$ PRECHECK&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DBSYS -d " + db_id + " -p <b><font color='blue'>" + patch.id + "</font></b> -a PRECHECK </i>" )
           elif i_action == 'APPLY':
-             logger.info("<i> &nbsp;&nbsp;  $$ APPLY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DBSYS -d " + db_id + " -p " + patch.id + " -a APPLY </i>")
+             logger.info("<i> &nbsp;&nbsp;  $$ APPLY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DBSYS -d " + db_id + " -p <b><font color='blue'>" + patch.id + "</font></b> -a APPLY </i>")
           elif i_action == 'BOTH':
-             logger.info("<i> &nbsp;&nbsp;  $$ PRECHECK&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DBSYS -d " + db_id + " -p " + patch.id + " -a PRECHECK </i>" )
-             logger.info("<i> &nbsp;&nbsp;  $$ APPLY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DBSYS -d " + db_id + " -p " + patch.id + " -a APPLY </i>")
+             logger.info("<i> &nbsp;&nbsp;  $$ PRECHECK&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DBSYS -d " + db_id + " -p <b><font color='blue'>" + patch.id + "</font></b> -a PRECHECK </i>" )
+             logger.info("<i> &nbsp;&nbsp;  $$ APPLY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DBSYS -d " + db_id + " -p <b><font color='blue'>" + patch.id + "</font></b> -a APPLY </i>")
        logger.info("&nbsp;&nbsp;  ++")
 
 # input params
@@ -187,7 +188,7 @@ if client_compartments.data:
                                db_id = databases[0].id
                                response_db = db_client.get_database(database_id=db_id)
                                db_lifecycle_state = response_db.data.lifecycle_state
-                               logger.info("&nbsp; Database OCID: " + db_id)
+                               logger.info("&nbsp; Database OCID: <b><font color='blue'>" + db_id +"</font></b>")
                                logger.info("* DB Lifecycle : " + db_lifecycle_state)
                                #logger.info(lst_db_home_patches.data)
                                # added i_type for v2
@@ -244,7 +245,7 @@ if client_compartments.data:
                                          gen_patch_commands(logger, db_id, db_home_patch, 'DB', 'BOTH', i) 
                                elif i_type == 'patch':
                                   logger.info("*")
-                                  logger.info("*** Database Patch Up-to-date ***")
+                                  logger.info("*** <b><font color='green'> Database Patch Up-to-date </font></b>***")
                                   logger.info("*")
                         else:
                            logger.info("No db home")
@@ -255,7 +256,7 @@ if client_compartments.data:
                                response_db_system = db_client.get_db_system(db_system_id)
                                db_sys_lifecycle_state = response_db_system.data.lifecycle_state
                                logger.info("*")
-                               logger.info("* DB System OCID : " + db_system_id)
+                               logger.info("* <b><font color='blue'> DB System OCID : " + db_system_id + "</font></b>")
                                logger.info("* DB System Lifecycle : " + db_sys_lifecycle_state)
                                #databases = db_client.list_databases(ocid_cli_site_env_compartment, db_home_id=db_home_id).data
                                #db_id = databases[0].id
@@ -333,7 +334,7 @@ if client_compartments.data:
                                             gen_patch_commands(logger, db_system_id, db_system_patch, 'DBSYS', 'BOTH', i)
                                   elif i_type == 'patch':
                                      logger.info("*")
-                                     logger.info("*** Database System Patch Up-to-date ***")
+                                     logger.info("*** <b><font color='green'> Database System Patch Up-to-date </font></b> ***")
                                      logger.info("*")
                         else:
                            logger.info("*")

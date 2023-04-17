@@ -75,7 +75,6 @@ fh.setLevel(logging.INFO)
 fh.setFormatter(formatter)
 logger.addHandler(fh)
 
-
 # Create a client for the Database service
 config=oci.config.from_file(file_location="~/.oci/config.cliinfra.comp")
 config_file = "/home/opc/.oci/config.cliinfra.comp"
@@ -94,14 +93,12 @@ if i_type.upper() == "DB":
    final_filename = os.path.join(file_path, final_out_file) 
    logger.info("**" + db_name + " : " + i_action + " for patch " + i_patch_id + " running...")
    print("**" + db_name + " : " + i_action + " for patch " + i_patch_id + " running...")
-   ##result = subprocess.run(['oci', 'db', 'database', 'patch', '--database-id', i_db_id, '--patch-action', i_action, '--patch-id', i_patch_id,  '--config-file', config_file])
+   begin_message = db_name + " : " + i_action + " starting... "
+   begin_subject = "OCI DB Patching " + i_action + " on " + db_name + " STARTING "  
+   TO_MAIL = 'nfii-dba-admin@nfiindustries.com'
+   send_mail(begin_message, '', begin_subject, TO_MAIL)
    try:
       result = subprocess.run(['oci', 'db', 'database', 'patch', '--database-id', i_db_id, '--patch-action', i_action, '--patch-id', i_patch_id,  '--config-file', config_file], stdout=subprocess.PIPE)
-   ##if result.returncode == 0:
-   ##   json_result = result.stdout.decode('utf-8')
-   ##   result_data = json.loads(json_result)
-   ##else:
-   ##   print("Patching Error:", result.stderr.decode())
    except oci.exceptions.TransientServiceError as e:
       print("Error code: ", e.code)
       print("Error message: ", e.message)
@@ -121,14 +118,6 @@ if i_type.upper() == "DB":
          data = json.loads(json_history)
       else:
          print("Error:", history.stderr.decode())
-      ## loop to just look at data block for this particular patch
-      ## it keeps looping even though no matching patch_id, try using item[0] 
-      ##for item in data['data']:
-        ## # this leep doesn't work as intended
-        ## if item['patch-id'] == i_patch_id:
-        ##    status = item['lifecycle-state']
-        ##    start_time = item['time-started']
-        ##    end_time = item['time-ended']
       latest_patch = data['data'][0]
       latest_patch_id = latest_patch['patch-id']
       if latest_patch_id != i_patch_id:
@@ -164,6 +153,10 @@ elif i_type.upper() == "DBSYS":
    final_filename = os.path.join(file_path, final_out_file)
    logger.info("**" + db_system_name + " : " + i_action + " for patch " + i_patch_id + " running...")
    print("**" + db_system_name + " : " + i_action + " for patch " + i_patch_id + " running...")
+   begin_message = db_system_name + " : " + i_action + " starting"
+   begin_subject = "OCI DB System Patching " + i_action + " on "  + db_system_name + " STARTING "  
+   TO_MAIL = 'nfii-dba-admin@nfiindustries.com'
+   send_mail(begin_message, '', begin_subject, TO_MAIL)
    try:
       result = subprocess.run(['oci', 'db', 'system', 'patch', '--db-system-id', i_db_id, '--patch-action', i_action, '--patch-id', i_patch_id, '--config-file', config_file])
    except oci.exceptions.TransientServiceError as e:
@@ -175,8 +168,8 @@ elif i_type.upper() == "DBSYS":
       print("... In Progress ...")
       logger.info("... In Progress ...")
       # sleep for 3 mins
-      ##for i in range(18):
-      for i in range(2):
+      for i in range(18):
+      ##for i in range(2):
          time.sleep(10)
          print("*")
       history = subprocess.run(['oci', 'db', 'patch-history', 'list', 'by-db-system', '--db-system-id', i_db_id, '--config-file', config_file], stdout=subprocess.PIPE)   
