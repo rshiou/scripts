@@ -1,0 +1,22 @@
+ *** Applying DB SYSTEM patch ***
+ *** Running DB PATCH APPLY *** 
+ DB Patching SUCCEEDED 
+ *** Applying DB SYSTEM patch ***
+ServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.93.1, Oracle-PythonCLI/3.23.2",
+    "code": "InvalidParameter",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "Patch is not valid for update. The patch has already been applied!",
+    "opc-request-id": "196017DE77914857B2DFFFAF2E44D47F/DFA21FD2781A9DF120EACDE697E52B38/E5AA58C3FFCF38B6CDF149E2CD0C4ACC",
+    "operation_name": "update_db_system",
+    "request_endpoint": "PUT https://database.us-ashburn-1.oraclecloud.com/20160918/dbSystems/ocid1.dbsystem.oc1.iad.anuwcljspgm6r4ia3xlusopenzppbpx3tgn2h67oa2qiqrmmkfqlcrjhpifa",
+    "status": 400,
+    "target_service": "database",
+    "timestamp": "2023-04-20T12:40:33.877417+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+ *** Running DB PATCH APPLY *** 
+ *** DB PATCH APPLY FAILED . Please check!!! ***
+ *** Running DB PATCH APPLY *** 
+ *** DB PATCH APPLY FAILED . Please check!!! ***
