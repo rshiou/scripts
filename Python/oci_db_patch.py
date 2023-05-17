@@ -89,10 +89,22 @@ status = 'IN_PROGRESS'
 if i_type.upper() == "DB":
    response = db_client.get_database(i_db_id)
    db_name = response.data.db_name
+   # 4/20/23
+   db_home_ocid = response.data.db_home_id
+   #
    final_out_file = db_name + "_" + out_file
    final_filename = os.path.join(file_path, final_out_file) 
    logger.info("**" + db_name + " : " + i_action + " for patch " + i_patch_id + " running...")
    print("**" + db_name + " : " + i_action + " for patch " + i_patch_id + " running...")
+   # 4/20/23 - get patch desc
+   lst_db_home_patches = db_client.list_db_home_patches(db_home_ocid)
+   for db_home_patch in lst_db_home_patches.data:
+      if db_home_patch.id == i_patch_id:
+         patch_desc = db_home_patch.description
+         logger.info("** Patch Description: " + patch_desc + " **")
+         print("** Patch Description: " + patch_desc + " **")
+         break
+   #
    begin_message = db_name + " : " + i_action + " starting... "
    begin_subject = "OCI DB Patching " + i_action + " on " + db_name + " STARTING "  
    TO_MAIL = 'nfii-dba-admin@nfiindustries.com'
@@ -108,8 +120,8 @@ if i_type.upper() == "DB":
       print("... In Progress ...")
       logger.info("... In Progress ...")
       # sleep for 3 mins
-      ##for i in range(18): 
-      for i in range(2): 
+      for i in range(18): 
+      ##for i in range(2): 
          time.sleep(10)
          print("*")
       history = subprocess.run(['oci', 'db', 'patch-history', 'list', 'by-database', '--database-id', i_db_id, '--config-file', config_file], stdout=subprocess.PIPE)
@@ -153,7 +165,15 @@ elif i_type.upper() == "DBSYS":
    final_filename = os.path.join(file_path, final_out_file)
    logger.info("**" + db_system_name + " : " + i_action + " for patch " + i_patch_id + " running...")
    print("**" + db_system_name + " : " + i_action + " for patch " + i_patch_id + " running...")
-   begin_message = db_system_name + " : " + i_action + " starting"
+   # 4/20/2023 - get system patch description
+   for db_system_patch in db_client.list_db_system_patches(i_db_id).data:
+      if db_system_patch.id == i_patch_id:
+         patch_desc = db_system_patch.description
+         logger.info("** Patch Description: " + patch_desc + " **")
+         print("** Patch Description: " + patch_desc + " **")
+         break
+   #   
+   begin_message = db_system_name + " : " + i_action + " for " + patch_desc +" starting"
    begin_subject = "OCI DB System Patching " + i_action + " on "  + db_system_name + " STARTING "  
    TO_MAIL = 'nfii-dba-admin@nfiindustries.com'
    send_mail(begin_message, '', begin_subject, TO_MAIL)

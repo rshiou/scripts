@@ -20,3 +20,19 @@ ServiceError:
  *** DB PATCH APPLY FAILED . Please check!!! ***
  *** Running DB PATCH APPLY *** 
  *** DB PATCH APPLY FAILED . Please check!!! ***
+ *** Applying DB SYSTEM patch ***
+ *** Running DB PATCH APPLY *** 
+ DB Patching SUCCEEDED 
+ *** Running DB PATCH APPLY *** 
+ DB Patching SUCCEEDED 
+ *** Running DB PATCH APPLY *** 
+ *** DB PATCH APPLY FAILED . Please check!!! ***
+ *** Running DB PATCH APPLY *** 
+ *** Running DB PATCH APPLY *** 
+ *** DB PATCH APPLY FAILED . Please check!!! ***
+ *** Running DB PATCH APPLY *** 
+ DB Patching SUCCEEDED 
+ DB Patching SUCCEEDED 
+ *** Applying DB SYSTEM patch ***
+ *** Running DB PATCH APPLY *** 
+ DB Patching SUCCEEDED 

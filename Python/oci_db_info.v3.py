@@ -188,7 +188,7 @@ if client_compartments.data:
                                db_id = databases[0].id
                                response_db = db_client.get_database(database_id=db_id)
                                db_lifecycle_state = response_db.data.lifecycle_state
-                               logger.info("&nbsp; Database OCID: <b><font color='blue'>" + db_id +"</font></b>")
+                               logger.info("&nbsp; <b>Database OCID</b>: <b><font color='blue'>" + db_id +"</font></b>")
                                logger.info("* DB Lifecycle : " + db_lifecycle_state)
                                #logger.info(lst_db_home_patches.data)
                                # added i_type for v2
@@ -256,7 +256,7 @@ if client_compartments.data:
                                response_db_system = db_client.get_db_system(db_system_id)
                                db_sys_lifecycle_state = response_db_system.data.lifecycle_state
                                logger.info("*")
-                               logger.info("* <b><font color='blue'> DB System OCID : " + db_system_id + "</font></b>")
+                               logger.info("* <b> DB System OCID </b>: <b><font color='blue'> " + db_system_id + "</font></b>")
                                logger.info("* DB System Lifecycle : " + db_sys_lifecycle_state)
                                #databases = db_client.list_databases(ocid_cli_site_env_compartment, db_home_id=db_home_id).data
                                #db_id = databases[0].id
@@ -287,11 +287,14 @@ if client_compartments.data:
                                   if lst_db_system_patches and i_type == 'patch':
                                      # added for v3 - 2/13/2023
                                      databases = db_client.list_databases(ocid_cli_site_env_compartment, db_home_id=db_home_id).data
+                                     db_nodes = db_client.list_db_nodes(ocid_cli_site_env_compartment, db_system_id=db_system_id).data
+                                     db_node_lifecycle_state = db_nodes[0].lifecycle_state
                                      database_id = databases[0].id
                                      logger.info("")
                                      logger.info("*")
                                      logger.info("*** Available Database System Patches ***")
                                      logger.info("++ DB System ID: " + db_system_id )
+                                     logger.info("++ DB Node Lifecycle: " + db_node_lifecycle_state )
                                      #logger.info("++ Database ocid: " + database_id) 
                                      logger.info("*")
                                      for i, db_system_patch in enumerate(lst_db_system_patches):
@@ -333,6 +336,13 @@ if client_compartments.data:
                                          else:
                                             gen_patch_commands(logger, db_system_id, db_system_patch, 'DBSYS', 'BOTH', i)
                                   elif i_type == 'patch':
+                                     logger.info("*")
+                                     db_nodes = db_client.list_db_nodes(ocid_cli_site_env_compartment, db_system_id=db_system_id).data
+                                     db_node_lifecycle_state = db_nodes[0].lifecycle_state
+                                     database_id = databases[0].id
+                                     logger.info("")
+                                     logger.info("*")
+                                     logger.info("++ DB Node Lifecycle: " + db_node_lifecycle_state )
                                      logger.info("*")
                                      logger.info("*** <b><font color='green'> Database System Patch Up-to-date </font></b> ***")
                                      logger.info("*")
