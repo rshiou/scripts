@@ -1,0 +1,5 @@
+SITE=BGLT341_QA
+PATCHDESC=JAN2023
+DB_ID=ocid1.database.oc1.iad.anuwcljrpgm6r4iaqytcsacvntlcod6honsa33t3jsmmsst6aq2pz4nqhvga
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqaqqo27kgzgr6npyexz4rbovub46cwcbb77ev5crvmgusq
+TYPE=DB

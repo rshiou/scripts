@@ -1,0 +1,7 @@
+SITE=WINE512_QA
+PATCHDESC=APR2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iaag2p3zfq2t6yf7ws7vq4kl7dndp4jd7rki5xi27by46a
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqa7vpfdcadqxbuap5fr4qa2npajeyhuiorjdmhbgnie3xq
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iapwyyvv53cj3mp6hhqnkwqrb4sgy5iljxwvmwi4yulbqq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqaeuqggjss25hbqomae656gcaestyb2t5v6xhypxb2tkkq
+TYPE=BOTH

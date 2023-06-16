@@ -1,0 +1,7 @@
+SITE=MSAP214_QA
+PATCHDESC=APR2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljspgm6r4ian3fvv6isxwacwzvmetkncegksd6l7jr5dlxpuoxoylta
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqaaxziaediu2aplyqg4jmzybjvpopkgmpbxwukiadefnha
+DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4iads3q5e5fks53eqjjer4nicbz4h7oy3c7ykquqgpaoz2q
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqabral2fks7m45b3ko7la2ygyq2ppntefyoq2auxsvosdq
+TYPE=BOTH

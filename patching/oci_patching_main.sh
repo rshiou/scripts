@@ -83,57 +83,29 @@ LOG=${LOG_PATH}/${SITE}_${PATCHDESC}_${TYPE}_${DATETIME}.log
 # delete log files older than 90 days
 find ${LOG_PATH} -name "*.log" -type f -mtime +90 -exec rm {} \;
 
-## DBSYS 
-## PRECHECK 
-##echo " *** Running DB SYSTEM PRECHECK *** "
-##echo " *** Running DB SYSTEM PRECHECK *** " >> $LOG
-
 #
-# 1 - DB SYSTEM PRECHECK
+# 1 - APPLY DB SYSTEM PATCH
 #
 if [[ ${TYPE} == "DBSYS" || ${TYPE} == "BOTH" ]];
-#if [[ (${TYPE} == "DBSYS" && ${PRECHECK} == "YES") || (${TYPE} == "BOTH" && ${PRECHECK} == "YES") ]];
 then
-#  echo ${TYPE}
-#  echo " *** Running DB SYSTEM PRECHECK *** "
-#  echo " *** Running DB SYSTEM PRECHECK *** " >> $LOG
-#  ${SYS_PRECHECK_CMD} >> $LOG
-#  SYS_PRECHECK_STATUS=`grep -oP 'Final status: \K\S+' $LOG`
-#  if [[ $SYS_PRECHECK_STATUS == "SUCCEEDED" ]];
-#  then
    echo " *** Applying DB SYSTEM patch ***" 
    DATETIME=`date +'%m%d%y%H%M%S'`
    LOG2=${LOG_PATH}/${SITE}_${PATCHDESC}_${TYPE}_${DATETIME}.log
    echo " *** Applying DB SYSTEM patch ***" >> $LOG2 
-#
-# 2 - DB SYSTEM PATCH APPLY if precheck succeeded
-#
    ${SYS_APPLY_CMD} >> $LOG2
    SYS_APPLY_STATUS=`grep -oP 'Final status: \K\S+' $LOG2`
-##  else
-##     echo " *** DB SYS Precheck ${SYS_PRECHECK_STATUS} . Please check!!! ***"
-##     exit 1
-##  fi
 fi
 
+
+#
+# 2 - APPLY DB PATCH
+#
 if [[ "${TYPE}" == "DB" || ( "${TYPE}" == "BOTH" && "${SYS_APPLY_STATUS}" == "SUCCEEDED" ) ]]; 
 then
-#  echo " *** Running DB PRECHECK *** "
-#  DATETIME=`date +'%m%d%y%H%M%S'`
-#  LOG3=${LOG_PATH}/${SITE}_${PATCHDESC}_${TYPE}_${DATETIME}.log
-#  echo " *** Running DB PRECHECK *** " >> $LOG3
-#
-# 3 - DB PATCH PRECHECK - if the above DB SYSTEM steps succeeded
-#
-#  ${DB_PRECHECK_CMD} >> $LOG3
-#  DB_PRECHECK_STATUS=`grep -oP 'Final status: \K\S+' $LOG3`
    echo " *** Running DB PATCH APPLY *** "
    DATETIME=`date +'%m%d%y%H%M%S'`
    LOG4=${LOG_PATH}/${SITE}_${PATCHDESC}_${TYPE}_${DATETIME}.log
    echo " *** Running DB PATCH APPLY *** " >> $LOG4
-#
-# 4 - DB PATCH APPLY - if all the above succeeded
-#
    ${DB_APPLY_CMD} >> $LOG4
    DB_APPLY_STATUS=`grep -oP 'Final status: \K\S+' $LOG4`
 elif [[ "${TYPE}" == "BOTH" && "${SYS_APPLY_STATUS}" != "SUCCEEDED" ]];
@@ -143,22 +115,9 @@ then
 fi
 
 
-#if [[ $TYPE != "DBSYS" && $DB_PRECHECK_STATUS == "SUCCEEDED" ]];
 if [[ $TYPE != "DBSYS" && $DB_APPLY_STATUS == "SUCCEEDED" ]];
 then
-#   echo " *** Running DB PATCH APPLY *** "
-#   DATETIME=`date +'%m%d%y%H%M%S'`
-#   LOG4=${LOG_PATH}/${SITE}_${PATCHDESC}_${TYPE}_${DATETIME}.log
-#   echo " *** Running DB PATCH APPLY *** " >> $LOG4
    echo " DB Patching SUCCEEDED "
-#
-# 4 - DB PATCH APPLY - if all the above succeeded
-#
-#   ${DB_APPLY_CMD} >> $LOG4
-#   DB_APPLY_STATUS=`grep -oP 'Final status: \K\S+' $LOG4`
-#else
-#   echo " *** DB PATCH PRECHECK ${DB_PRECHECK_STATUS} . Please check!!! ***"
-#   exit 1
 elif [[ $TYPE != "DBSYS" && $DB_APPLY_STATUS != "SUCCEEDED" ]];
 then
    echo " *** DB PATCH APPLY ${DB_APPLY_STATUS} . Please check!!! ***"

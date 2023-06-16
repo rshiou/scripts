@@ -1,0 +1,7 @@
+SITE=BRAD511_QA
+PATCHDESC=APR2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iacitnmusbiygr4qa5oz4hza6cm3lgyd5gjtxk553zmrkq
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqa7vpfdcadqxbuap5fr4qa2npajeyhuiorjdmhbgnie3xq
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iaxij63w4zsfrurcvkzuyrydbupatejvd5jbetdlge4qla
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqaeuqggjss25hbqomae656gcaestyb2t5v6xhypxb2tkkq
+TYPE=BOTH

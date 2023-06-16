@@ -1,0 +1,5 @@
+SITE=TARG210_QA
+PATCHDESC=APR2023
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iayrubftj6nmkidrcawzrgfxuvtewln7locddwvgnuojua
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqanbpvj5pgi7x45wmkdaaynu65iqubzzwfmrwdt64cqvsa
+TYPE=DB 

@@ -1,0 +1,7 @@
+SITE=TARG216_QA
+PATCHDESC=APR2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljrpgm6r4ia4h4s2r2sa5c5gdezacbd4aptgmmeah7r6ajs7mjspk6a
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqa3tedonn552gpdagoq635cntvvdwhvdz2qlygvsipvl2q
+DB_ID=ocid1.database.oc1.iad.anuwcljrpgm6r4ia2yal36erdiglan7iouux7gvo52vsw4o7e7gc3hzi3o5a
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqabl7g6gxutr3kfe563afqd3dycmmyq5kcw4oadktnsagq
+TYPE=BOTH

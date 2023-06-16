@@ -1,0 +1,7 @@
+SITE=DORM309_DEV
+PATCHDESC=APR2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iakhvqn3evdcs7sqicp2ie4u4rmu5gi5gwnfketpz2b45q
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqa7vpfdcadqxbuap5fr4qa2npajeyhuiorjdmhbgnie3xq
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iawe5sdfbxtfz3goa5kum3pcyluabh6jesvoouuvuqi5ha
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqanbpvj5pgi7x45wmkdaaynu65iqubzzwfmrwdt64cqvsa
+TYPE=BOTH

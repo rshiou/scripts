@@ -1,0 +1,7 @@
+SITE=HAIN922_QA
+PATCHDESC=APR2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iak6ibrbjegtm6b566o75txx3yvkhjslfewbi7b7j5brbq
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqa7vpfdcadqxbuap5fr4qa2npajeyhuiorjdmhbgnie3xq
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iaqf4mjyqpz7a6yfkh7dorpumi3na64236ftw7oetsyvbq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqaeuqggjss25hbqomae656gcaestyb2t5v6xhypxb2tkkq
+TYPE=BOTH
