@@ -11,8 +11,11 @@
 #              
 #              - 3/29/2023 - generate patching commands
 #              - 4/16/2023 - added formatting to db / db system / patch ocid for better visual
-# 
-#  Usage: python3 oci_db_info.v3.py -t [ patch | lifecycle ] -e [ qa | dev | prod | all ]
+#              
+#  In progress - v4 6/9/2023
+#              - generate parm file for each db
+#
+#  Usage: python3 oci_db_info.v4.py -t [ patch | lifecycle ] -e [ qa | dev | prod | all ]
 #
 import warnings
 #warnings.filterwarnings("ignore", category=DeprecationWarning, module='cryptography')
@@ -79,6 +82,11 @@ file_prefix = 'db_info'
 extension = '.txt'
 #oci_db_patch = '/usr/local/bin/opc/scripts/oci_db_patch.py'
 
+# param file 6/6/2023 - for new version, generate parm file for each db
+file_path = '/usr/local/bin/opc/logs/db_info/param'
+extension = '.parm'
+
+
 # Delete log files older than n_num days
 n_num = datetime.timedelta(days=7)
 for file in os.listdir(file_path):
@@ -99,19 +107,25 @@ precheck_file = os.path.join(file_path, patch_precheck)
 
 patch_apply = "apply_" + date_string + extension
 apply_file = os.path.join(file_path, patch_apply)
- 
-logger = logging.getLogger(name='OCI DB Patches Info')
 
+# logger for general log info 
+logger = logging.getLogger(name='OCI DB Patches Info')
 logger.setLevel(logging.INFO)  # set to logging.INFO if you don't want DEBUG logs
 ##formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - '
 ##                              '%(message)s')
+
+# we can use the same formatter for logger2
 formatter = logging.Formatter('%(message)s')
+
+# 6/9/2023 - logger2 for param files
+# will be used inside the loop
+logger2 = logging.getLogger(name='OCI DB Patch Param per DB')
+logger2.setLevel(logging.INFO)
 
 fh = logging.FileHandler(filename)
 fh.setLevel(logging.INFO)
 fh.setFormatter(formatter)
 logger.addHandler(fh)
-
 
 # Create a client for the Database service
 config=oci.config.from_file(file_location="~/.oci/config.cliinfra.comp")
@@ -196,12 +210,31 @@ if client_compartments.data:
                                   logger.info("*")
                                   logger.info("*** Available Database Patches ***")
                                   logger.info("*")
+
+                                  # 6/9/2023 - param file prefix
+                                  parm_prefix = site_name + '_' + env.upper() 
+                                  # 6/9/2023 - file handler for parm files
+                                  fh2 = logging.FileHandler("") # Empty file for now, to be updated inside the loop
+                                  fh2.setLevel(logging.INFO)
+                                  fh2.setFormatter(formatter) 
+                                  
                                   for i, db_home_patch in enumerate(lst_db_home_patches.data):
                                       logger.info("++ Patch Description : " + db_home_patch.description)
                                       logger.info("&nbsp;&nbsp;  ++ ocid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : " + db_home_patch.id)
                                       logger.info("&nbsp;&nbsp;  ++ version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : " + db_home_patch.version)
                                       logger.info("&nbsp;&nbsp;  ++ time_released&nbsp; : " + db_home_patch.time_released.strftime("%Y-%m-%d %H:%M:%S"))
+
+
+                                      # 6/9/2023 - get MON YEAR from patch description - use in file name and param file
+                                      # MAY NOT WORK since it is inside the db home patch loop, db system is a different loop
+                                      # how about we combine the content of db patch param and db system patch param if their prefix is the same
+                                      patch_date_parts = db_home_patch.description.split()
+                                      month = datetime.datetime.strptime(patch_date_parts[0], '%b').strftime('%b').upper()
+                                      year = patch_date_parts[1]
+                                      formatted_patch_date = month + year
                                       #
+
+
                                       # 3/30/2023 - Different patching last_action & lifecycle_state scenarios
                                       if db_home_patch.last_action is None:
                                       # if no action from before, provide both PRECHECK and APPLY commands
@@ -245,11 +278,7 @@ if client_compartments.data:
                                          gen_patch_commands(logger, db_id, db_home_patch, 'DB', 'BOTH', i) 
                                elif i_type == 'patch':
                                   logger.info("*")
-<<<<<<< HEAD
-                                  logger.info("*** Database Patch Up-to-date ***")
-=======
                                   logger.info("*** <b><font color='green'> Database Patch Up-to-date </font></b>***")
->>>>>>> 8528f777bdb938e769f371100bb560b5778cf3da
                                   logger.info("*")
                         else:
                            logger.info("No db home")
@@ -341,9 +370,6 @@ if client_compartments.data:
                                             gen_patch_commands(logger, db_system_id, db_system_patch, 'DBSYS', 'BOTH', i)
                                   elif i_type == 'patch':
                                      logger.info("*")
-<<<<<<< HEAD
-                                     logger.info("*** Database System Patch Up-to-date ***")
-=======
                                      db_nodes = db_client.list_db_nodes(ocid_cli_site_env_compartment, db_system_id=db_system_id).data
                                      db_node_lifecycle_state = db_nodes[0].lifecycle_state
                                      database_id = databases[0].id
@@ -352,7 +378,6 @@ if client_compartments.data:
                                      logger.info("++ DB Node Lifecycle: " + db_node_lifecycle_state )
                                      logger.info("*")
                                      logger.info("*** <b><font color='green'> Database System Patch Up-to-date </font></b> ***")
->>>>>>> 8528f777bdb938e769f371100bb560b5778cf3da
                                      logger.info("*")
                         else:
                            logger.info("*")

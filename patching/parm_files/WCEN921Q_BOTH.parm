@@ -1,0 +1,7 @@
+SITE=WCEN921_QA
+PATCHDESC=JAN2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iaozfvnye3ncibscyrgmnmvlujjkod2mjymwqw6pw6f7la
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqaxgeqacj73ceprsgupmmfoiutfz7rrj3j5y26fsiy3mhq
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iaynqvqsahkwi7bxul4n6nezqzof66bujhfdaw3u2n7xlq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqaca5dw5locqgv6yop5tbejjz2nklorhta5pjkngr6fpxq
+TYPE=BOTH

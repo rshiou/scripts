@@ -1,0 +1,7 @@
+SITE=KRFT705_QA
+PATCHDESC=APR2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljspgm6r4iacrrpgivbpmkuxuwejk3fm7zvsfhiv5n242owtc5vgapq
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqaaxziaediu2aplyqg4jmzybjvpopkgmpbxwukiadefnha
+DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4iagf4jucznkbnhzenl3nlurbmm6mndpdiu3lhnlmkyktoq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqabral2fks7m45b3ko7la2ygyq2ppntefyoq2auxsvosdq
+TYPE=BOTH

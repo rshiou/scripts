@@ -1,0 +1,6 @@
+DIRECTORY=OCI_DUMP_DIR
+DUMPFILE=EAVE215D17_wmlm215eave-msf215eave_03212022_0100_%U.dmp
+LOGFILE=impdp_eave215q_031422.log
+remap_schema=wmlm215eave:wmlm215eave
+remap_schema=msf215eave:msf215eave
+parallel=1

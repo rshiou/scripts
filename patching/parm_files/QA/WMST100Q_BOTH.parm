@@ -1,0 +1,7 @@
+SITE=WMST100_QA
+PATCHDESC=APR2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljspgm6r4ia6fv4aicupxo4ybktcg6bkufqs46reciuv4zqn4j4vamq
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqaaxziaediu2aplyqg4jmzybjvpopkgmpbxwukiadefnha
+DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4iaxnqjbmap52duuv6oizjinrtzyj2ts24yept6ekndxyia
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqabral2fks7m45b3ko7la2ygyq2ppntefyoq2auxsvosdq
+TYPE=BOTH

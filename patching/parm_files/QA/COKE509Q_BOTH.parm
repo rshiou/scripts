@@ -1,0 +1,7 @@
+SITE=COKE509_QA
+PATCHDESC=APR2023
+DBSYS_ID= ocid1.dbsystem.oc1.iad.anuwcljspgm6r4iam6lxxif7neubvw75refap42z46st6llgc6ubzhmbx5aq
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqaaxziaediu2aplyqg4jmzybjvpopkgmpbxwukiadefnha
+DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4ia3y6kqj2um47t7yp3fqpcbbzk7jskstxc6q4vm6wv23ya
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqadwudzxrrwbwlt4xgkuqocov3rvsoatxskwken74eofba
+TYPE=BOTH

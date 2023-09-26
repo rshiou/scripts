@@ -20,6 +20,8 @@ import sys
 import datetime
 import time
 import smtplib
+import random
+import string
 from main_v01 import *
 import argparse
 
@@ -39,12 +41,13 @@ i_patch_id = args.patch
 i_action = args.action
 
 now = datetime.datetime.now()
+rand_str = ''.join(random.choices(string.ascii_letters + string.digits, k=4))
 
 # Format the date and time as a string
 date_string = now.strftime("%Y-%m-%d_%H-%M-%S")
 
 file_path = '/usr/local/bin/opc/logs/db_patching'
-file_prefix = 'oci_db_patch'
+file_prefix = rand_str + "_" + i_type + "_" + i_action  
 extension = '.txt'
 
 # Delete log files older than n_num days
@@ -72,7 +75,6 @@ fh.setLevel(logging.INFO)
 fh.setFormatter(formatter)
 logger.addHandler(fh)
 
-
 # Create a client for the Database service
 config=oci.config.from_file(file_location="~/.oci/config.cliinfra.comp")
 config_file = "/home/opc/.oci/config.cliinfra.comp"
@@ -87,16 +89,28 @@ status = 'IN_PROGRESS'
 if i_type.upper() == "DB":
    response = db_client.get_database(i_db_id)
    db_name = response.data.db_name
+   # 4/20/23
+   db_home_ocid = response.data.db_home_id
+   #
+   final_out_file = db_name + "_" + out_file
+   final_filename = os.path.join(file_path, final_out_file) 
    logger.info("**" + db_name + " : " + i_action + " for patch " + i_patch_id + " running...")
    print("**" + db_name + " : " + i_action + " for patch " + i_patch_id + " running...")
-   ##result = subprocess.run(['oci', 'db', 'database', 'patch', '--database-id', i_db_id, '--patch-action', i_action, '--patch-id', i_patch_id,  '--config-file', config_file])
+   # 4/20/23 - get patch desc
+   lst_db_home_patches = db_client.list_db_home_patches(db_home_ocid)
+   for db_home_patch in lst_db_home_patches.data:
+      if db_home_patch.id == i_patch_id:
+         patch_desc = db_home_patch.description
+         logger.info("** Patch Description: " + patch_desc + " **")
+         print("** Patch Description: " + patch_desc + " **")
+         break
+   #
+   begin_message = db_name + " : " + i_action + " starting... "
+   begin_subject = "OCI DB Patching " + i_action + " on " + db_name + " STARTING "  
+   TO_MAIL = 'nfii-dba-admin@nfiindustries.com'
+   send_mail(begin_message, '', begin_subject, TO_MAIL)
    try:
       result = subprocess.run(['oci', 'db', 'database', 'patch', '--database-id', i_db_id, '--patch-action', i_action, '--patch-id', i_patch_id,  '--config-file', config_file], stdout=subprocess.PIPE)
-   ##if result.returncode == 0:
-   ##   json_result = result.stdout.decode('utf-8')
-   ##   result_data = json.loads(json_result)
-   ##else:
-   ##   print("Patching Error:", result.stderr.decode())
    except oci.exceptions.TransientServiceError as e:
       print("Error code: ", e.code)
       print("Error message: ", e.message)
@@ -106,8 +120,8 @@ if i_type.upper() == "DB":
       print("... In Progress ...")
       logger.info("... In Progress ...")
       # sleep for 3 mins
-      ##for i in range(18): 
-      for i in range(2): 
+      for i in range(18): 
+      ##for i in range(2): 
          time.sleep(10)
          print("*")
       history = subprocess.run(['oci', 'db', 'patch-history', 'list', 'by-database', '--database-id', i_db_id, '--config-file', config_file], stdout=subprocess.PIPE)
@@ -116,14 +130,6 @@ if i_type.upper() == "DB":
          data = json.loads(json_history)
       else:
          print("Error:", history.stderr.decode())
-      ## loop to just look at data block for this particular patch
-      ## it keeps looping even though no matching patch_id, try using item[0] 
-      ##for item in data['data']:
-        ## # this leep doesn't work as intended
-        ## if item['patch-id'] == i_patch_id:
-        ##    status = item['lifecycle-state']
-        ##    start_time = item['time-started']
-        ##    end_time = item['time-ended']
       latest_patch = data['data'][0]
       latest_patch_id = latest_patch['patch-id']
       if latest_patch_id != i_patch_id:
@@ -155,8 +161,22 @@ if i_type.upper() == "DB":
 elif i_type.upper() == "DBSYS":
    response = db_client.get_db_system(i_db_id)
    db_system_name = response.data.display_name
+   final_out_file = db_system_name + "_" + out_file
+   final_filename = os.path.join(file_path, final_out_file)
    logger.info("**" + db_system_name + " : " + i_action + " for patch " + i_patch_id + " running...")
    print("**" + db_system_name + " : " + i_action + " for patch " + i_patch_id + " running...")
+   # 4/20/2023 - get system patch description
+   for db_system_patch in db_client.list_db_system_patches(i_db_id).data:
+      if db_system_patch.id == i_patch_id:
+         patch_desc = db_system_patch.description
+         logger.info("** Patch Description: " + patch_desc + " **")
+         print("** Patch Description: " + patch_desc + " **")
+         break
+   #   
+   begin_message = db_system_name + " : " + i_action + " for " + patch_desc +" starting"
+   begin_subject = "OCI DB System Patching " + i_action + " on "  + db_system_name + " STARTING "  
+   TO_MAIL = 'nfii-dba-admin@nfiindustries.com'
+   send_mail(begin_message, '', begin_subject, TO_MAIL)
    try:
       result = subprocess.run(['oci', 'db', 'system', 'patch', '--db-system-id', i_db_id, '--patch-action', i_action, '--patch-id', i_patch_id, '--config-file', config_file])
    except oci.exceptions.TransientServiceError as e:
@@ -168,8 +188,8 @@ elif i_type.upper() == "DBSYS":
       print("... In Progress ...")
       logger.info("... In Progress ...")
       # sleep for 3 mins
-      ##for i in range(18):
-      for i in range(2):
+      for i in range(18):
+      ##for i in range(2):
          time.sleep(10)
          print("*")
       history = subprocess.run(['oci', 'db', 'patch-history', 'list', 'by-db-system', '--db-system-id', i_db_id, '--config-file', config_file], stdout=subprocess.PIPE)   
@@ -213,7 +233,13 @@ elif i_type.upper() == "DBSYS":
 
 #status = IN_PROGRESS
 
-       
+logger.info("*")       
+logger.info("*")       
+logger.info("*")       
+logger.info("*** Run the following on the db server as root if there's any issues ***")       
+logger.info(" $ /opt/oracle/dcs/bin/dbcli list-jobs ")
+logger.info(" $ /opt/oracle/dcs/bin/dbcli describe-job -i [job-id] ")
+
 
 message = MIMEMultipart()
 
@@ -235,8 +261,8 @@ html = f"<html><body>{colored_body}</body></html>"
 message.attach(MIMEText(colored_body, "html"))
 #msg = MIMEText(html, 'html')
 
-#TO_MAIL = 'nfii-dba-admin@nfiindustries.com'
-TO_MAIL = 'ronald.shiou@nfiindustries.com'
+TO_MAIL = 'nfii-dba-admin@nfiindustries.com'
+#TO_MAIL = 'ronald.shiou@nfiindustries.com'
 
 if i_type == 'DB':
    m_subject = "OCI DB Patching " + i_action + " on " + db_name + " " + status
@@ -245,3 +271,5 @@ elif i_type == 'DBSYS':
 
 send_mail(message.as_string(), '', m_subject, TO_MAIL)
 
+os.rename(filename,final_filename)
+print("Log file: " + final_filename)

@@ -1,0 +1,7 @@
+SITE=SCI21QA
+PATCHDESC=APR2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljspgm6r4iaphu2eb5apq3m3o4vdgiwtrzn5lbgniq6innnn2bq7tzq
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqaaxziaediu2aplyqg4jmzybjvpopkgmpbxwukiadefnha
+DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4ia2lvyjfbynvgx7d4dvhqznvmhftaus5urf6z2hcobc6la
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqadwudzxrrwbwlt4xgkuqocov3rvsoatxskwken74eofba
+TYPE=BOTH

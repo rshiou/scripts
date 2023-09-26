@@ -1,0 +1,7 @@
+SITE=TARG506_DEV
+PATCHDESC=JAN2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljrpgm6r4iasje2bs4x7rk763pfhr4d3633xez62pqcoopwcgzdkhia
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqardmxo4lnnx7c6ubnmdzezlc6ilrcm5uev7axvmyt2aqq
+DB_ID=ocid1.database.oc1.iad.anuwcljrpgm6r4ialxjgpfqmbnvwvbg7vbv3xjksaj23mdankfrntlco3yaq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqaqqo27kgzgr6npyexz4rbovub46cwcbb77ev5crvmgusq
+TYPE=BOTH

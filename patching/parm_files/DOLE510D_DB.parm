@@ -1,0 +1,5 @@
+SITE=DOLE510_QA
+PATCHDESC=JAN2023
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iaxf3jqtahbngmdfnmo2uqwtqj6lduqjvz37dq2tiy3aaa
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqavpiertri4gn43cxxlej7qqcm66awp5lunq4js5lrrzda
+TYPE=DB

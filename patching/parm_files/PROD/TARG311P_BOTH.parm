@@ -1,0 +1,7 @@
+SITE=TARG311_PROD
+PATCHDESC=JAN2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljrpgm6r4iaswp4puqbk4tupsly2ognnnputayc3vo5qo335gsgdfeq
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqardmxo4lnnx7c6ubnmdzezlc6ilrcm5uev7axvmyt2aqq
+DB_ID=ocid1.database.oc1.iad.anuwcljrpgm6r4iag2t2blw2rvdpmwcaaj7bi7hk5cnlqucwpwdjd7tcuena
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqaqqo27kgzgr6npyexz4rbovub46cwcbb77ev5crvmgusq
+TYPE=BOTH

@@ -1,0 +1,7 @@
+SITE=EAVE215_QA
+PATCHDESC=APR2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iam3dddpk2rwceocknrubqunzfvrywl5mpwigmc55j4lpa
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqa7vpfdcadqxbuap5fr4qa2npajeyhuiorjdmhbgnie3xq
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iakfc2oqvp673vop3w6qvawlgoajpdigqdj22oj2ca3mcq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqanbpvj5pgi7x45wmkdaaynu65iqubzzwfmrwdt64cqvsa
+TYPE=BOTH

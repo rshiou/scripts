@@ -1,0 +1,7 @@
+SITE=DOLE213_QA
+PATCHDESC=APR2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljrpgm6r4iae5u5n2ryybe54k6gal5osptimfo47a6qwaxviuxd7efq
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqa3tedonn552gpdagoq635cntvvdwhvdz2qlygvsipvl2q
+DB_ID=ocid1.database.oc1.iad.anuwcljrpgm6r4iaihautckgm5wl34e45jbm5tbfzasocvyd6lntwlpyvetq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqabl7g6gxutr3kfe563afqd3dycmmyq5kcw4oadktnsagq
+TYPE=BOTH

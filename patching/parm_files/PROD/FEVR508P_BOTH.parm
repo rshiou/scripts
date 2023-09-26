@@ -1,0 +1,7 @@
+SITE=FEVR508_PROD
+PATCHDESC=JAN2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljspgm6r4iahlmh6i6qgri3gedfyuvkoadi6kuvyvylx4torupxzfbq
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqa3ihg7mp5zvgnjz454youbv3ncrqgjzgm6tyvhaektuta
+DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4iau6jp5bknmw6jezbrei6oimja5jijxgbj5bzbc4whtliq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqai4kbcz7m77xbehw3wiyikwnwtnhhnegii7uftipj5w7a
+TYPE=BOTH

@@ -11,8 +11,9 @@
 #              
 #              - 3/29/2023 - generate patching commands
 #              - 4/16/2023 - added formatting to db / db system / patch ocid for better visual
+#              - 6/14/2023 - print in better format for creating the param file
 # 
-#  Usage: python3 oci_db_info.v3.py -t [ patch | lifecycle ] -e [ qa | dev | prod | all ]
+#  Usage: python3 oci_db_info.v5.py -t [ patch | lifecycle ] -e [ qa | dev | prod | all ]
 #
 import warnings
 #warnings.filterwarnings("ignore", category=DeprecationWarning, module='cryptography')
@@ -27,7 +28,7 @@ from main_v01 import *
 import argparse
 
 # db_id = db_sys_id or db_home_id, patch = db_system_patch or db_home_patch
-def gen_patch_commands(logger, db_id, patch, i_type, i_action, i_count):
+def gen_patch_commands(logger, site_env, formatted_patch_date, db_id, patch, i_type, i_action, i_count):
     oci_db_patch = '/usr/local/bin/opc/repo/scripts/Python/oci_db_patch.py'
     if i_type not in ['DBSYS', 'DB']:
        raise ValueError(f"Invalid value '{i_type}' for parameter 'i_type'")
@@ -40,6 +41,14 @@ def gen_patch_commands(logger, db_id, patch, i_type, i_action, i_count):
        logger.info("<b> &nbsp;&nbsp;  ++ Patching commands ++ </b>")
        logger.info("<b> &nbsp;&nbsp;  ++ ++ </b>")
        if i_type == 'DB':
+          logger.info(" ")
+          logger.info("<b>+++ For param file +++</b>")
+          logger.info("<font color='blue'>SITE=" + site_env + "</font>")
+          logger.info("<font color='blue'>PATCHDESC=" + formatted_patch_date + "</font>")
+          logger.info("<font color='blue'>DB_ID=" + db_id + "</font>")
+          logger.info("<font color='blue'>DB_PATCH_ID=" + patch.id + "</font>")
+          logger.info("<b>+++++++++++++++++</b>")
+          logger.info(" ")
           if i_action == 'PRECHECK':
              logger.info("<i> &nbsp;&nbsp;  $$ PRECHECK&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DB -d " + db_id + " -p <b><font color='blue>" + patch.id + "</font></b> -a PRECHECK </i>")
           elif i_action == 'APPLY':
@@ -48,6 +57,14 @@ def gen_patch_commands(logger, db_id, patch, i_type, i_action, i_count):
              logger.info("<i> &nbsp;&nbsp;  $$ PRECHECK&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DB -d " + db_id + " -p <b><font color='blue'>" + patch.id + "</font></b> -a PRECHECK </i>" )
              logger.info("<i> &nbsp;&nbsp;  $$ APPLY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DB -d " + db_id + " -p <b><font color='blue'>" + patch.id + "</font></b> -a APPLY </i>")
        elif i_type == 'DBSYS':
+          logger.info(" ")
+          logger.info("<b>+++ For param file +++</b>")
+          logger.info("<font color='blue'>SITE=" + site_env + "</font>")
+          logger.info("<font color='blue'>PATCHDESC=" + formatted_patch_date + "</font>")
+          logger.info("<font color='blue'>DBSYS_ID=" + db_id + "</font>")
+          logger.info("<font color='blue'>DBSYS_PATCH_ID=" + patch.id + "</font>")
+          logger.info("<b>+++++++++++++++++</b>")
+          logger.info(" ")
           if i_action == 'PRECHECK':
              logger.info("<i> &nbsp;&nbsp;  $$ PRECHECK&nbsp;&nbsp;&nbsp; : python3 " + oci_db_patch + " -t DBSYS -d " + db_id + " -p <b><font color='blue'>" + patch.id + "</font></b> -a PRECHECK </i>" )
           elif i_action == 'APPLY':
@@ -123,18 +140,12 @@ client_compartments = identity_client.list_compartments(OCID_CLIINFRA)
 
 if client_compartments.data:
    for client_compartment in client_compartments.data:
-       #logger.info(client_compartment)
        client_compartment_id = client_compartment.id
        client_compartment_name = client_compartment.name
-       #logger.info("+")
-       #logger.info("+")
        logger.info("+")
-       #logger.info("===========================================")
        logger.info("+++++++++++++++++++++++++++++++++++++++++++")
        logger.info("<b> ++ CUSTOMER : " + client_compartment_name + "</b>")
        logger.info("+++++++++++++++++++++++++++++++++++++++++++")
-       #logger.info("+")
-       #logger.info("+")
        logger.info("+")
        ##logger.info("Client Compartment OCID: " + client_compartment_id)
        ##cli_site_compartments = identity_client.list_compartments(client_compartment_id)
@@ -177,6 +188,9 @@ if client_compartments.data:
                         logger.info("==================================")
                         logger.info("<b>" + client_name + ": " + site_name + ": " +  env + "</b>")
                         logger.info("==================================")
+                        # 6/14/2023 - v5
+                        site_env = site_name + '_' + env.upper()
+                        #
                         lst_db_homes = db_client.list_db_homes(ocid_cli_site_env_compartment) ## e.g. 8ave >> 215 >> Dev compartment
                         if lst_db_homes.data:
                            for db_home in lst_db_homes.data:
@@ -197,6 +211,12 @@ if client_compartments.data:
                                   logger.info("*** Available Database Patches ***")
                                   logger.info("*")
                                   for i, db_home_patch in enumerate(lst_db_home_patches.data):
+                                      # 6/14/2023 - v5
+                                      patch_date_parts = db_home_patch.description.split()
+                                      month = datetime.datetime.strptime(patch_date_parts[0], '%b').strftime('%b').upper()
+                                      year = patch_date_parts[1]
+                                      formatted_patch_date = month + year
+                                      # 
                                       logger.info("++ Patch Description : " + db_home_patch.description)
                                       logger.info("&nbsp;&nbsp;  ++ ocid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : " + db_home_patch.id)
                                       logger.info("&nbsp;&nbsp;  ++ version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : " + db_home_patch.version)
@@ -210,12 +230,12 @@ if client_compartments.data:
                                             logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : None")
                                          else:
                                             logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : " + db_home_patch.lifecycle_state)
-                                         gen_patch_commands(logger, db_id, db_home_patch, 'DB', 'BOTH', i) 
+                                         gen_patch_commands(logger, site_env, formatted_patch_date, db_id, db_home_patch, 'DB', 'BOTH', i) 
                                       elif db_home_patch.last_action == 'PRECHECK' and db_home_patch.lifecycle_state == 'SUCCESS':
                                       # else if PRECHECK was successful, provide APPLY commands only
                                          logger.info("&nbsp;&nbsp;  ++ last_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : PRECHECK")
                                          logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : " + db_home_patch.lifecycle_state)
-                                         gen_patch_commands(logger, db_id, db_home_patch, 'DB', 'APPLY', i) 
+                                         gen_patch_commands(logger, site_env, formatted_patch_date, db_id, db_home_patch, 'DB', 'APPLY', i) 
                                       elif db_home_patch.last_action == 'PRECHECK' and db_home_patch.lifecycle_state != 'SUCCESS':
 				      # else if PRECHECK wasn't successful, provide both PRECHECK and APPLY commands
                                          logger.info("&nbsp;&nbsp;  ++ last_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : " + db_home_patch.last_action)
@@ -223,7 +243,7 @@ if client_compartments.data:
                                             logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : None")
                                          else:
                                             logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : " + db_home_patch.lifecycle_state) 
-                                         gen_patch_commands(logger, db_id, db_home_patch, 'DB', 'BOTH', i) 
+                                         gen_patch_commands(logger, site_env, formatted_patch_date, db_id, db_home_patch, 'DB', 'BOTH', i) 
                                       elif db_home_patch.last_action == 'APPLY' and db_home_patch.lifecycle_state != 'SUCCESS':
                                       # else if APPLY wasn't successful, provide both PRECHECK and APPLY commands
                                          logger.info("&nbsp;&nbsp;  ++ last_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : APPLY")
@@ -231,7 +251,7 @@ if client_compartments.data:
                                             logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : None")
                                          else:
                                             logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : " + db_home_patch.lifecycle_state)
-                                         gen_patch_commands(logger, db_id, db_home_patch, 'DB', 'BOTH', i) 
+                                         gen_patch_commands(logger, site_env, formatted_patch_date, db_id, db_home_patch, 'DB', 'BOTH', i) 
                                       elif db_home_patch.last_action == 'APPLY' and db_home_patch.lifecycle_state == 'SUCCESS':
                                       # else if APPLY was successful, no need to provide PRECHECK or APPLY commands
                                          logger.info("&nbsp;&nbsp;  ++ last_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : APPLY")
@@ -242,14 +262,10 @@ if client_compartments.data:
                                             logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : None")
                                          else:
                                             logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : " + db_home_patch.lifecycle_state)
-                                         gen_patch_commands(logger, db_id, db_home_patch, 'DB', 'BOTH', i) 
+                                         gen_patch_commands(logger, site_env, formatted_patch_date, db_id, db_home_patch, 'DB', 'BOTH', i) 
                                elif i_type == 'patch':
                                   logger.info("*")
-<<<<<<< HEAD
-                                  logger.info("*** Database Patch Up-to-date ***")
-=======
                                   logger.info("*** <b><font color='green'> Database Patch Up-to-date </font></b>***")
->>>>>>> 8528f777bdb938e769f371100bb560b5778cf3da
                                   logger.info("*")
                         else:
                            logger.info("No db home")
@@ -303,6 +319,12 @@ if client_compartments.data:
                                      logger.info("*")
                                      for i, db_system_patch in enumerate(lst_db_system_patches):
                                          #logger.info(db_system_patch)
+                                         # 6/14/2023 - v5
+                                         patch_date_parts = db_system_patch.description.split()
+                                         month = datetime.datetime.strptime(patch_date_parts[0], '%b').strftime('%b').upper()
+                                         year = patch_date_parts[1]
+                                         formatted_patch_date = month + year
+                                         # 
                                          logger.info("++ Patch Description : " + db_system_patch.description)
                                          logger.info("&nbsp;&nbsp;  ++ ocid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;           : " + db_system_patch.id)
                                          logger.info("&nbsp;&nbsp;  ++ version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        : " + db_system_patch.version)
@@ -314,36 +336,33 @@ if client_compartments.data:
                                                logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : None")
                                             else: 
                                                logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : " + db_system_patch.lifecycle_state)
-                                            gen_patch_commands(logger, db_system_id, db_system_patch, 'DBSYS', 'BOTH', i)
+                                            gen_patch_commands(logger, site_env, formatted_patch_date, db_system_id, db_system_patch, 'DBSYS', 'BOTH', i)
                                          elif db_system_patch.last_action == 'PRECHECK' and db_system_patch.lifecycle_state != 'SUCCESS':
                                             logger.info("&nbsp;&nbsp;  ++ last_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    : " + db_system_patch.last_action)
                                             if db_system_patch.lifecycle_state is None:
                                                logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : None")
                                             else:
                                                logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : " + db_system_patch.lifecycle_state)
-                                            gen_patch_commands(logger, db_system_id, db_system_patch, 'DBSYS', 'BOTH', i)
+                                            gen_patch_commands(logger, site_env, formatted_patch_date, db_system_id, db_system_patch, 'DBSYS', 'BOTH', i)
                                          elif db_system_patch.last_action == 'PRECHECK' and db_system_patch.lifecycle_state == 'SUCCESS':
                                             logger.info("&nbsp;&nbsp;  ++ last_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    : " + db_system_patch.last_action)
                                             logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : " + db_system_patch.lifecycle_state)
-                                            gen_patch_commands(logger, db_system_id, db_system_patch, 'DBSYS', 'APPLY', i)
+                                            gen_patch_commands(logger, site_env, formatted_patch_date, db_system_id, db_system_patch, 'DBSYS', 'APPLY', i)
                                          elif db_system_patch.last_action == 'APPLY' and db_system_patch.lifecycle_state != 'SUCCESS':
                                             logger.info("&nbsp;&nbsp;  ++ last_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    : " + db_system_patch.last_action)
                                             if db_system_patch.lifecycle_state is None:
                                                logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : None")
                                             else:
                                                logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : " + db_system_patch.lifecycle_state)
-                                            gen_patch_commands(logger, db_system_id, db_system_patch, 'DBSYS', 'BOTH', i)
+                                            gen_patch_commands(logger, site_env, formatted_patch_date, db_system_id, db_system_patch, 'DBSYS', 'BOTH', i)
                                          elif db_system_patch.last_action == 'APPLY' and db_system_patch.lifecycle_state == 'SUCCESS':
                                             logger.info("&nbsp;&nbsp;  ++ last_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    : " + db_system_patch.last_action)
                                             logger.info("&nbsp;&nbsp;  ++ lifecycle_state&nbsp; : " + db_system_patch.lifecycle_state)
                                             logger.info("&nbsp;&nbsp;  ++ PATCH APPLIED SUCCESSFULLY")
                                          else:
-                                            gen_patch_commands(logger, db_system_id, db_system_patch, 'DBSYS', 'BOTH', i)
+                                            gen_patch_commands(logger, site_env, formatted_patch_date, db_system_id, db_system_patch, 'DBSYS', 'BOTH', i)
                                   elif i_type == 'patch':
                                      logger.info("*")
-<<<<<<< HEAD
-                                     logger.info("*** Database System Patch Up-to-date ***")
-=======
                                      db_nodes = db_client.list_db_nodes(ocid_cli_site_env_compartment, db_system_id=db_system_id).data
                                      db_node_lifecycle_state = db_nodes[0].lifecycle_state
                                      database_id = databases[0].id
@@ -352,7 +371,6 @@ if client_compartments.data:
                                      logger.info("++ DB Node Lifecycle: " + db_node_lifecycle_state )
                                      logger.info("*")
                                      logger.info("*** <b><font color='green'> Database System Patch Up-to-date </font></b> ***")
->>>>>>> 8528f777bdb938e769f371100bb560b5778cf3da
                                      logger.info("*")
                         else:
                            logger.info("*")
