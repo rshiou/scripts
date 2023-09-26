@@ -244,7 +244,7 @@ if client_compartments.data:
                                          gen_patch_commands(logger, db_id, db_home_patch, 'DB', 'BOTH', i) 
                                elif i_type == 'patch':
                                   logger.info("*")
-                                  logger.info("*** No Database Patches Available ***")
+                                  logger.info("*** Database Patch Up-to-date ***")
                                   logger.info("*")
                         else:
                            logger.info("No db home")
@@ -333,7 +333,7 @@ if client_compartments.data:
                                             gen_patch_commands(logger, db_system_id, db_system_patch, 'DBSYS', 'BOTH', i)
                                   elif i_type == 'patch':
                                      logger.info("*")
-                                     logger.info("*** No Database System Patches ***")
+                                     logger.info("*** Database System Patch Up-to-date ***")
                                      logger.info("*")
                         else:
                            logger.info("*")

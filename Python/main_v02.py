@@ -45,7 +45,7 @@ def sendMail(m_subject, m_content, m_from, m_distro):
 def send_mail(body, m_host, m_subject, m_distro):
     message = MIMEMultipart()
     message['Subject'] = m_subject+' '+m_host
-    message['From'] = 'it-engineering@nfiindustries.com'
+    message['From'] = 'nfii-dba-admin@nfiindustries.com'
     message['To'] = m_distro
     body_content = body
     message.attach(MIMEText(body_content, "html"))
