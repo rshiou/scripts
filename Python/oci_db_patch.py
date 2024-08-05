@@ -51,10 +51,11 @@ file_prefix = rand_str + "_" + i_type + "_" + i_action
 extension = '.txt'
 
 # Delete log files older than n_num days
-n_num = datetime.timedelta(days=1)
+n_num = datetime.timedelta(days=90)
 for file in os.listdir(file_path):
     ##print(file)
-    if file.startswith(file_prefix) and file.endswith(extension):
+    ##if file.startswith(file_prefix) and file.endswith(extension):
+    if file.endswith(extension):
        path_file = os.path.join(file_path, file)
        file_age = now - datetime.datetime.fromtimestamp(os.path.getctime(path_file))
        if file_age >= n_num:
