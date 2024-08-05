@@ -1,0 +1,7 @@
+SITE=BALL315_DEV
+PATCHDESC=APR2024
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4ia4tocaecw3kohusvrtb3z7xtbyifuqkfb2o4ij6yyzfbq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqaezkuebws77tuvtcldrspitthf5pbg6f4txybnrl7sa7q
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iaz7guc2rxwilcqwhfj7csqxry6oobev5bpk4fyo4uj2tq
+DBSYS_PATCH_ID=ocid1.dbupdate.oc1.iad.anuwcljtt5t4sqqayhkjomjnsdyby6kx5htn5wgc5cxtrqgkz35pxvynvg5q
+TYPE=BOTH

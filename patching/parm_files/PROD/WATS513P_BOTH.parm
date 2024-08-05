@@ -1,0 +1,7 @@
+SITE=WATS513_PROD
+PATCHDESC=JAN2024
+DB_ID=ocid1.database.oc1.iad.anuwcljrpgm6r4iayn4aktrman2iapg2c5i6zu5lizwb4hldhystkhboxgea
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqasaasflysxlqdmxnxuhag3cziozgf3yfrpbkhmir7d5tq
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljrpgm6r4iaaint2upiwquy6zrki74ef3mi4nzrbftgkb7y7tgpyswq
+DBSYS_PATCH_ID=ocid1.dbupdate.oc1.iad.anuwcljrt5t4sqqasdx5ob4hu53fd5l4usz27st2h6tlvv35w5o4swfjfoma
+TYPE=BOTH

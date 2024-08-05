@@ -1,2 +1,42 @@
  *** Running DB PATCH APPLY *** 
  DB Patching SUCCEEDED 
+ *** Applying DB SYSTEM patch ***
+ *** Applying DB SYSTEM patch ***
+ *** Running DB PATCH APPLY *** 
+ *** Applying DB SYSTEM patch ***
+ *** Running DB PATCH APPLY *** 
+ DB Patching SUCCEEDED 
+ DB Patching SUCCEEDED 
+ *** Running DB PATCH APPLY *** 
+ DB Patching SUCCEEDED 
+ *** Applying DB SYSTEM patch ***
+ *** Running DB PATCH APPLY *** 
+ DB Patching SUCCEEDED 
+ *** Running DB PATCH APPLY *** 
+ DB Patching SUCCEEDED 
+Error: Missing param TYPE
+ *** Applying DB SYSTEM patch ***
+ *** Running DB PATCH APPLY *** 
+ DB Patching SUCCEEDED 
+ *** Running DB PATCH APPLY *** 
+TransientServiceError:
+{
+    "client_version": "Oracle-PythonSDK/2.118.0, Oracle-PythonCLI/3.37.1",
+    "code": "IncorrectState",
+    "logging_tips": "Please run the OCI CLI command using --debug flag to find more debug information.",
+    "message": "The operation cannot be performed because the Database with ID ocid1.database.oc1.iad.anuwcljtpgm6r4iapwyyvv53cj3mp6hhqnkwqrb4sgy5iljxwvmwi4yulbqq is in the BACKUP_IN_PROGRESS state.",
+    "opc-request-id": "CC0F3AC610E64A1FBEFD20A6BF0988ED/D51C53755E3B68922CCA8ADE36F79FEB/5283627950BD76C28CCC705544532424",
+    "operation_name": "update_db_home",
+    "request_endpoint": "PUT https://database.us-ashburn-1.oraclecloud.com/20160918/dbHomes/ocid1.dbhome.oc1.iad.anuwcljt6dtnscqaqvkit42uiehcyzjbmafcr7s2u5dwinzaxwq5x6gfa6ta",
+    "status": 409,
+    "target_service": "database",
+    "timestamp": "2024-01-22T22:57:39.950788+00:00",
+    "troubleshooting_tips": "See [https://docs.oracle.com/iaas/Content/API/References/apierrors.htm] for more information about resolving this error. If you are unable to resolve this issue, run this CLI command with --debug option and contact Oracle support and provide them the full error message."
+}
+ *** DB PATCH APPLY PATCH_ID_DO_NOT_MATCH . Please check!!! ***
+/usr/local/bin/opc/repo/scripts/patching/oci_patching_main.sh: line 27: /usr/local/bin/opc/repo/scripts/patching/parm_files/BALL315Q_DB.parm: No such file or directory
+Error: Missing param TYPE
+/usr/local/bin/opc/repo/scripts/patching/oci_patching_main.sh: line 27: /usr/local/bin/opc/repo/scripts/patching/parm_files/BALL315Q_DB.parm: No such file or directory
+Error: Missing param TYPE
+ *** Running DB PATCH APPLY *** 
+ DB Patching SUCCEEDED 

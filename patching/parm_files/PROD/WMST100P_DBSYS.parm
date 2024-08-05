@@ -1,0 +1,5 @@
+SITE=WMST100_PROD
+PATCHDESC=JAN2024
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4ia5jgpii5a4tzncw64zclhmr3doqtsm2dynodymi363dxa
+DBSYS_PATCH_ID=ocid1.dbupdate.oc1.iad.anuwcljtt5t4sqqayhkjomjnsdyby6kx5htn5wgc5cxtrqgkz35pxvynvg5q
+TYPE=DBSYS

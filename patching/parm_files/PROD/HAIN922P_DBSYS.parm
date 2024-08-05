@@ -1,0 +1,5 @@
+SITE=HAIN922_PROD
+PATCHDESC=JAN2024
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iafaanmqagclh5stbhzpmogbvbvoypaxwdwqgf53znntda
+DBSYS_PATCH_ID=ocid1.dbupdate.oc1.iad.anuwcljtt5t4sqqa5jmkjmtqrm2ooeyofqtgoms5ygqsqebuwb3nzhpim53q
+TYPE=DBSYS

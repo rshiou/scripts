@@ -1,0 +1,7 @@
+SITE=COKE509_PROD
+PATCHDESC=JUL2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljspgm6r4iag2oucnnfijmbamyjufclnqmmhmf6apgj2skjn2myywpq
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqayuhabyif3mhwzc6oyyp3ntqyo2ojqe7xzjgcrwr7fhnq
+DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4ialr2e47ffnb2uuaze5qrnzufbb2n5p5budiwq7dlp7idq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqasadhfutbxqg74yvmf4l3gvxl3lmd4t4z3ze5hjr4t46q
+TYPE=BOTH

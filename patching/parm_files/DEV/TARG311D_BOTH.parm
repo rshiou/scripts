@@ -1,0 +1,7 @@
+SITE=TARG311_DEV
+PATCHDESC=APR2024
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljspgm6r4iakepua6dgjn2dcbw2rbgthqtox2ukzw7rf27wj77t2doa
+DBSYS_PATCH_ID=ocid1.dbupdate.oc1.iad.anuwcljst5t4sqqaez4cgvcusa2iforhxn7ncark23gopppipdwmjodwmjwa
+DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4ia3o4w6s7lg4qrz7fqcm7yeguovjmkafwxogqr5f5ocadq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqarfwockkbbo4wpjvnhhhbq67dt6klj6ihuch6cifqeq3a
+TYPE=BOTH

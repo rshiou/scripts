@@ -1,7 +1,0 @@
-SITE=TARG918_QA
-PATCHDESC=JAN2023
-DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljspgm6r4iahnb7fjk6mosrrxgjswua5tiwqjuersazmkmqcrpfskgq
-DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqa3ihg7mp5zvgnjz454youbv3ncrqgjzgm6tyvhaektuta
-DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4iaxa67eoinjo2mln266my56zy2pfhk7zfax7oyk4dgm3pq
-DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqai4kbcz7m77xbehw3wiyikwnwtnhhnegii7uftipj5w7a
-TYPE=BOTH

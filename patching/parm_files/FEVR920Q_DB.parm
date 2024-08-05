@@ -1,7 +1,0 @@
-SITE=FEVR920_QA
-PATCHDESC=JAN2023
-DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljspgm6r4ia3xlusopenzppbpx3tgn2h67oa2qiqrmmkfqlcrjhpifa
-DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqa3ihg7mp5zvgnjz454youbv3ncrqgjzgm6tyvhaektuta
-DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4iau5fmky7ekf35bixrao4l5lnu4kif2owmpgwlz6stbkha
-DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqai4kbcz7m77xbehw3wiyikwnwtnhhnegii7uftipj5w7a
-TYPE=DB  

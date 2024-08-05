@@ -1,0 +1,7 @@
+SITE=FATT313_PROD
+PATCHDESC=JUL2023
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iadnj3y5sjqsgg63w74soiikti3xrce35hfjhaw2a2inua
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqag4piwqcagserh6ymdiamvmpxn3zg7r2jobhicig7fc5a
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iakfqvs7xqdkqww3opz3onnog3uoyzqzcleukbtidzpxha
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqa7b4bvx46b36c64yduop6vqoivvxe5goyym6iusp6umpa
+TYPE=BOTH

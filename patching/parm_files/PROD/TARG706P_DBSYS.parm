@@ -1,0 +1,5 @@
+SITE=TARG706_PROD
+PATCHDESC=JAN2024
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljrpgm6r4ia7u66tr3shxg2x4vzbiocbbfpeb4kr4d7gabk6eaeeqyq
+DBSYS_PATCH_ID=ocid1.dbupdate.oc1.iad.anuwcljrt5t4sqqasdx5ob4hu53fd5l4usz27st2h6tlvv35w5o4swfjfoma
+TYPE=DBSYS

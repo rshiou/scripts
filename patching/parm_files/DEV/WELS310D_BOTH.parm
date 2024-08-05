@@ -1,0 +1,7 @@
+SITE=WELS310_DEV
+PATCHDESC=APR2024
+DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4iabkmnxc6twuy3nvzoib2jagkmkjvosyjhx5frivmpmhma
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqarfwockkbbo4wpjvnhhhbq67dt6klj6ihuch6cifqeq3a
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljspgm6r4ia7ycfxurctd7ti6ph5qbderbt5ln5nk3qfjgkw7mkknha
+DBSYS_PATCH_ID=ocid1.dbupdate.oc1.iad.anuwcljst5t4sqqaez4cgvcusa2iforhxn7ncark23gopppipdwmjodwmjwa
+TYPE=BOTH

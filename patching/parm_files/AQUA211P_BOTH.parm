@@ -1,7 +1,0 @@
-SITE=AQUA211_PROD
-PATCHDESC=JAN2023
-DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljrpgm6r4iasfisiekkpsfcclh3uh72y2sa5kpbvrx2vml2evd36hda
-DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqardmxo4lnnx7c6ubnmdzezlc6ilrcm5uev7axvmyt2aqq
-DB_ID=ocid1.database.oc1.iad.anuwcljrpgm6r4iavhgdkbso6wpchyxih3pl4p7be3yy2td3w5gcrqjmugsq
-DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqaqqo27kgzgr6npyexz4rbovub46cwcbb77ev5crvmgusq
-TYPE=BOTH

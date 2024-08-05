@@ -1,7 +1,0 @@
-SITE=DORM309_PROD
-PATCHDESC=JAN2023
-DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljspgm6r4iazudlmbwznszg3tdxtabpjhoyg3itxlrrbzn5yee4zfwq
-DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqa3ihg7mp5zvgnjz454youbv3ncrqgjzgm6tyvhaektuta
-DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4iarhsfaxjubbtkdvwhqvnq6esyiuwpgqb4ww7rpaae7ynq
-DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqai4kbcz7m77xbehw3wiyikwnwtnhhnegii7uftipj5w7a
-TYPE=BOTH

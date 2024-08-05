@@ -1,0 +1,7 @@
+SITE=DSON604_DEV
+PATCHDESC=APR2024
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4ia24jquy6g6ejdmvwvxpdawjth7566soqye6k6xvmgv46q
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqaezkuebws77tuvtcldrspitthf5pbg6f4txybnrl7sa7q
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iaxt46oixfphnjtjdwyfforul4p77mbmqb2kpjqiwhwlta
+DBSYS_PATCH_ID=ocid1.dbupdate.oc1.iad.anuwcljtt5t4sqqayhkjomjnsdyby6kx5htn5wgc5cxtrqgkz35pxvynvg5q
+TYPE=BOTH

@@ -1,0 +1,7 @@
+SITE=BLTR217_PROD
+PATCHDESC=JUL2023
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4ia2wiojbzfmkowbovfd32lir6p3cbqd6dulijpq32bu2ga
+DBSYS_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqa7b4bvx46b36c64yduop6vqoivvxe5goyym6iusp6umpa
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iamrxrvhpme5n2us5rghokchb3qazdvgba3wh4cn4uanca
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqa63rd4feykg5zgtm2c3q5utdgx6tarv5p3627stpen4ua
+TYPE=BOTH

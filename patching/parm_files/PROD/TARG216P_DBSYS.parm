@@ -1,0 +1,5 @@
+SITE=TARG216_PROD
+PATCHDESC=JAN2024
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljrpgm6r4iaxdnnr2byrm27uma44r7uvw3xpp3sccthdxfo5kjsdbpa
+DBSYS_PATCH_ID=ocid1.dbupdate.oc1.iad.anuwcljrt5t4sqqasdx5ob4hu53fd5l4usz27st2h6tlvv35w5o4swfjfoma
+TYPE=DBSYS

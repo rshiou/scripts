@@ -1,0 +1,5 @@
+SITE=FEVR920_PROD
+PATCHDESC=JAN2024
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljrpgm6r4ia5sodrn6n6iwryedzj7mfpdplp72y7qu5lo3rrwy4c7ea
+DBSYS_PATCH_ID=ocid1.dbupdate.oc1.iad.anuwcljrt5t4sqqasdx5ob4hu53fd5l4usz27st2h6tlvv35w5o4swfjfoma
+TYPE=DBSYS
