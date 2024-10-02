@@ -1,0 +1,5 @@
+SITE=BMBU924_PROD
+PATCHDESC=JAN2024
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iacegwzmhp4tflw4raumro6rhr4dzqbjgowe7dvffgbpxq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqadig2fwrkxc5px6onevsenp5fvi4d2ujnpdinrpetnjda
+TYPE=DB

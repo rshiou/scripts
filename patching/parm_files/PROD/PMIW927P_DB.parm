@@ -1,0 +1,5 @@
+SITE=PMIW927_PROD
+PATCHDESC=JUL2024
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4ia3tihh7q5mykczilfmhywk2mdqh4xi37fb6t7lf6az7bq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqavhvwdlhnszbx5i5cq4j6i5nfdf7ccwkc2l5kit5yjnea
+TYPE=DB

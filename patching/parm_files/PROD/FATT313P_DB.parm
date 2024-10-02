@@ -1,0 +1,5 @@
+SITE=FATT313_PROD
+PATCHDESC=APR2024
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iadnj3y5sjqsgg63w74soiikti3xrce35hfjhaw2a2inua
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqaezkuebws77tuvtcldrspitthf5pbg6f4txybnrl7sa7q
+TYPE=DB

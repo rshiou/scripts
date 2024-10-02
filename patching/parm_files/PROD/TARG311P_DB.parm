@@ -1,0 +1,5 @@
+SITE=TARG311_PROD
+PATCHDESC=JAN2024
+DB_ID=ocid1.database.oc1.iad.anuwcljrpgm6r4iag2t2blw2rvdpmwcaaj7bi7hk5cnlqucwpwdjd7tcuena
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqasaasflysxlqdmxnxuhag3cziozgf3yfrpbkhmir7d5tq
+TYPE=DB

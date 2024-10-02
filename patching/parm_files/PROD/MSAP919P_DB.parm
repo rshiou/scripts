@@ -1,0 +1,5 @@
+SITE=MSAP919_PROD
+PATCHDESC=JAN2024
+DB_ID=ocid1.database.oc1.iad.anuwcljspgm6r4ia4ezle45c6s2etto2tqew3ijyx3hwme6n7cukhvvhig4a
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljst5t4sqqa5ngb6bsvq3xyvwpau67h7wnjbs5jkdoo3ehut2w3hudq
+TYPE=DB

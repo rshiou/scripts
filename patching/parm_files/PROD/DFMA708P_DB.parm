@@ -1,0 +1,5 @@
+SITE=DFMA708_PROD
+PATCHDESC=JAN2024
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iak63qkzi3vy6qua7hjhyyxxgs42kmedtgk62wzwn6fusa
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqadig2fwrkxc5px6onevsenp5fvi4d2ujnpdinrpetnjda
+TYPE=DB

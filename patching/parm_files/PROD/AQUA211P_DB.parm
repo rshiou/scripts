@@ -1,0 +1,5 @@
+SITE=AQUA211_PROD
+PATCHDESC=JAN2024
+DB_ID=ocid1.database.oc1.iad.anuwcljrpgm6r4iavhgdkbso6wpchyxih3pl4p7be3yy2td3w5gcrqjmugsq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqasaasflysxlqdmxnxuhag3cziozgf3yfrpbkhmir7d5tq
+TYPE=DB

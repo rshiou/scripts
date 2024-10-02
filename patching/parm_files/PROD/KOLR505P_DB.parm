@@ -1,0 +1,5 @@
+SITE=KOLR505_PROD
+PATCHDESC=JAN2024
+DB_ID=ocid1.database.oc1.iad.anuwcljrpgm6r4ia6mvk4rz2ql2o64cyi3bjwaupeu3gz5mcvcu7a6ukfqlq
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqasaasflysxlqdmxnxuhag3cziozgf3yfrpbkhmir7d5tq
+TYPE=DB

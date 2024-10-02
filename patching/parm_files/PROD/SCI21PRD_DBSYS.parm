@@ -1,0 +1,5 @@
+SITE=SCI2021_PROD
+PATCHDESC=APR2024
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljrpgm6r4iahapqyeskrgdtc5fw6mua7jovoxn6ydo5xwvuydkq6b7q
+DBSYS_PATCH_ID=ocid1.dbupdate.oc1.iad.anuwcljrt5t4sqqaibp25xponc56sywwg4w6f6xm3gadzllmbqpmbxgdw2oa
+TYPE=DBSYS

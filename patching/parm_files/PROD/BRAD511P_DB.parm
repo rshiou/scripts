@@ -1,0 +1,5 @@
+SITE=BRAD511_PROD
+PATCHDESC=JAN2024
+DB_ID=ocid1.database.oc1.iad.anuwcljtpgm6r4iavadvsixn3thj5isdjfkngy7qxwlkctzhz6b6yg46jira
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljtt5t4sqqadig2fwrkxc5px6onevsenp5fvi4d2ujnpdinrpetnjda
+TYPE=DB

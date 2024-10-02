@@ -1,0 +1,5 @@
+SITE=PMIW927_PROD
+PATCHDESC=JUL2024
+DBSYS_ID=ocid1.dbsystem.oc1.iad.anuwcljtpgm6r4iahbcpdmpmzthdwhlsohf4fkh5r7mjkcydng3e5hurf5rq
+DBSYS_PATCH_ID=ocid1.dbupdate.oc1.iad.anuwcljtt5t4sqqawfnadzitmcjhuv6ejebrcwmgoq2g2lrswf7gl4ry4c3q
+TYPE=DBSYS

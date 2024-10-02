@@ -1,0 +1,5 @@
+SITE=FEVR920_PROD
+PATCHDESC=JAN2024
+DB_ID=ocid1.database.oc1.iad.anuwcljrpgm6r4iagt6upb24vwkwuv5w7m355njuukh7rhzpns6rfiht5kqa
+DB_PATCH_ID=ocid1.dbpatch.oc1.iad.anuwcljrt5t4sqqasaasflysxlqdmxnxuhag3cziozgf3yfrpbkhmir7d5tq
+TYPE=DB
