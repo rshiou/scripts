@@ -48,6 +48,7 @@ def gen_patch_commands(logger, site_env, formatted_patch_date, db_id, patch, i_t
           logger.info("<font color='blue'>PATCHDESC=" + formatted_patch_date + "</font>")
           logger.info("<font color='blue'>DB_ID=" + db_id + "</font>")
           logger.info("<font color='blue'>DB_PATCH_ID=" + patch.id + "</font>")
+          logger.info("<font color='blue'>TYPE=DB</font>")
           logger.info("<b>+++++++++++++++++</b>")
           logger.info(" ")
           if i_action == 'PRECHECK':
@@ -64,6 +65,7 @@ def gen_patch_commands(logger, site_env, formatted_patch_date, db_id, patch, i_t
           logger.info("<font color='blue'>PATCHDESC=" + formatted_patch_date + "</font>")
           logger.info("<font color='blue'>DBSYS_ID=" + db_id + "</font>")
           logger.info("<font color='blue'>DBSYS_PATCH_ID=" + patch.id + "</font>")
+          logger.info("<font color='blue'>TYPE=DBSYS</font>")
           logger.info("<b>+++++++++++++++++</b>")
           logger.info(" ")
           if i_action == 'PRECHECK':
